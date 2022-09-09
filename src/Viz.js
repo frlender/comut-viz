@@ -164,7 +164,7 @@ export default function Viz(props){
         //     .attr('fill','lightgrey');
         
         const xbar_height = margin*2
-        const ybar_width = margin*2
+        const ybar_width = margin*2.4
         const indi_height_each = margin/2*1.2
         const xlabel_height = margin*2
         const ylabel_width =  margin*2

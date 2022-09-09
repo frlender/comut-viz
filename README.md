@@ -1,10 +1,11 @@
-# Getting Started with Create React App
+# Comut-viz
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+An online app for creating comutation plots
+https://frlender.github.io/comut-viz-app/
 
-## Available Scripts
+## Introduction
 
-In the project directory, you can run:
+Current tools for creating comutation plots are either offline packages that require coding or online websites with limited customization. We developed Comut-viz to interactively filter and visualize molecular information as downloadable comutation plots. It includes colored labels for numeric metadata and a preloaded palette for changing colors. As a front-end only app, Comut-viz guarantees privacy of user data and no latency in the analysis. 
 
 ### `npm start`
 

@@ -199,7 +199,7 @@ class Bar extends Gi{
         if(mode==='xbar'){
             // lw is long width, sw is short width
             this.lw = this.width
-            this.sw = this.height
+            this.sw = this.height-1
             this.lkey = 'width'
             this.skey = 'height'
             this.lcoord = 'x'
@@ -333,7 +333,7 @@ class YBar extends Gi{
         const padding = 3
         gt.selectAll('text').data(pcts)
             .join('text')
-            .attr('y',d => y(d.key)+y.bandwidth()/2*1.2)
+            .attr('y',d => y(d.key)+y.bandwidth()/2+fs*.5)
             .text(d => d.val)
             .attr('text-anchor','end')
             .attr('x',gx-padding)
