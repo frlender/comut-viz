@@ -1,0 +1,51 @@
+sample	Biopsy site	Nonsynonymous	Synonymous	purity
+Sample25	Kidney	2	1	0.49
+Sample24	Kidney	19	7	0.29
+Sample23	Kidney	29	6	0.74
+Sample29	Kidney	52	17	0.93
+Sample21	Kidney	31	11	0.51
+Sample30	Kidney	98	7	0.5700000000000001
+Sample19	Kidney	20	5	0.05
+Sample31	Kidney	94	44	0.39
+Sample32	Kidney	39	3	0.93
+Sample35	Kidney	37	13	0.92
+Sample49	Kidney	28	1	0.35
+Sample37	Kidney	33	15	0.7000000000000001
+Sample39	Kidney	50	15	0.0
+Sample9	Kidney	64	14	0.18
+Sample7	Kidney	84	21	0.09
+Sample6	Kidney	36	5	0.51
+Sample44	Kidney	58	29	0.92
+Sample38	Kidney	3	1	0.19
+Sample40	Liver	95	39	0.97
+Sample34	Liver	79	24	0.72
+Sample33	Liver	14	1	0.8
+Sample41	Liver	28	2	0.85
+Sample43	Liver	13	4	0.05
+Sample46	Liver	21	8	0.27
+Sample47	Liver	51	8	0.39
+Sample28	Liver	29	6	0.9
+Sample50	Liver	91	23	0.19
+Sample11	Liver	55	4	0.7000000000000001
+Sample22	Liver	97	6	0.92
+Sample17	Liver	12	3	0.6900000000000001
+Sample16	Liver	36	13	0.5700000000000001
+Sample15	Liver	50	9	0.7000000000000001
+Sample4	Liver	17	6	0.97
+Sample48	Lung	40	7	0.79
+Sample2	Lung	67	26	0.39
+Sample3	Lung	15	5	0.17
+Sample45	Lung	71	11	0.74
+Sample5	Lung	33	8	0.47
+Sample42	Lung	52	14	0.47
+Sample8	Lung	41	11	0.54
+Sample1	Lung	62	1	0.49
+Sample27	Lung	12	1	0.6900000000000001
+Sample12	Lung	8	4	0.23
+Sample13	Lung	79	39	0.9
+Sample18	Lung	0	0	0.13
+Sample20	Lung	87	25	0.89
+Sample10	Lung	13	4	0.74
+Sample36	Lymph Node	77	5	0.29
+Sample14	Lymph Node	36	18	0.94
+Sample26	Lymph Node	98	0	0.07
