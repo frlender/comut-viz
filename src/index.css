@@ -1,0 +1,110 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto; */
+}
+
+.content {
+  min-height: calc(100vh - 50px);
+}
+.footer {
+  height: 50px;
+  background-color: #f8f9fa;
+  color:#6c757d
+}
+
+.footer-inner{
+  padding-top: 15px;
+  text-align: center;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.inline{
+  vertical-align: top;
+  display: inline-block;
+}
+
+.header{
+  background-color: #f8f9fa;
+  color: #6c757d;
+  font-size: 15;
+  font-size: x-large;
+  font-family: auto;
+  font-weight: bold;
+}
+
+
+.form-control-i{
+  /* display: block; */
+    /* width: 100%; */
+    /* height: calc(1.5em + 0.75rem + 2px); */
+    /* padding: 0.375rem 0.75rem; */
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+}
+
+.set-color-btn{
+  padding: 1px 0.75em 2px 0.75em;
+  vertical-align: 6%;
+  margin-left: 1px;
+}
+
+.waterfall-sort{
+  margin-top: .2em;
+  font-size: 1.1em;
+  font-weight: 500;
+}
+
+.input-status{
+  min-height: 32px;
+}
+
+.table{
+  max-width: 800px;
+}
+
+.checkbox{
+  vertical-align: -9%;
+}
+
+.btn-i{
+  padding: .15rem .6rem;
+  margin-right: 45px
+}
+
+.span-input{
+  padding-top: 2px
+}
+
+.container-pad{
+  padding-left: 38px;
+}
+
+.example{
+  vertical-align: -10%;
+  padding-left: 0.75em;
+}
+
+a{
+  color: grey;
+}
+
+a:hover{
+  color: black;
+}
