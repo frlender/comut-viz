@@ -14,4 +14,6 @@ Current tools for creating comutation plots are either offline packages that req
 
 
 
-The source code for the site is licensed under the MIT license
+## License
+
+The source code for the site is licensed under the MIT license.
