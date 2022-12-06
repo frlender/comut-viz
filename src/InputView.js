@@ -154,12 +154,12 @@ export default function InputView(props){
             <div className="col-">
                 <div className="mb-1">Mutation data in the format of "sample category value":</div>
                 <input className='form-control-i' onChange={readData} type='file' accept='.css,.txt,.tsv'/>
-                <span className="example"><a href='/example_input.tsv'>example</a></span>
+                <span className="example"><a download target="_blank" href='https://raw.githubusercontent.com/frlender/comut-viz-app/gh-pages/example_input.tsv'>example</a></span>
             </div>
             <div className="col- pl-5">
                 <div className="mb-1">Sample metadata (Optional):</div>
                 <input className='form-control-i' onChange={readSampleMeta} type='file' accept='.css,.txt,.tsv'/>
-                <span className="example"><a href='/example_sample_meta.tsv'>example</a></span>
+                <span className="example"><a download target="_blank" href='https://raw.githubusercontent.com/frlender/comut-viz-app/gh-pages/example_sample_meta.tsv'>example</a></span>
             </div>
         
         </div>

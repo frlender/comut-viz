@@ -193,9 +193,9 @@ export default function Viz(props){
                 ylabel_width,vm.height)
                 .draw(vata.rows.cates)
         
-        const xlabels = new XLabels(svg,ylabel_width,vm.gy+vm.height,
-                    vm.width,xlabel_height)
-                    .draw(vata.cols.samples)
+        // const xlabels = new XLabels(svg,ylabel_width,vm.gy+vm.height,
+        //             vm.width,xlabel_height)
+        //             .draw(vata.cols.samples)
         
         const indis = [];
         vata.cmeta.arr.forEach((item,i) => {
