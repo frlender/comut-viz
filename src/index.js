@@ -11,8 +11,8 @@ import './bootstrap.min.css';
 import './index.css';
 import React, { useState } from 'react';
 
-
-import InputView from './InputView';
+import InputView from './InputView'
+import FilterView from './FilterView';
 import Viz from './Viz';
 
 // console.log('aa')
@@ -54,24 +54,8 @@ console.log(df)
 
 function App(){
   const [vata,setVata] = useState(null)
-  
-  // const data = [
-  //   {month: new Date(2015, 0, 1), bananas: 1920, cherries: 960, dates: 400},
-  //   {month: new Date(2015, 1, 1), apples: 1600, bananas: 1440, cherries: 960, dates: 400},
-  //   {month: new Date(2015, 2, 1), apples:  640, bananas:  960, cherries: 640, dates: 400},
-  //   {month: new Date(2015, 3, 1), apples:  320, cherries: 640, dates: 400}
-  // ];
-
-  // const stack = d3.stack()
-  //   .keys(["apples", "bananas", "cherries", "dates"])
-  //   .order(d3.stackOrderNone)
-  //   .offset(d3.stackOffsetNone);
-
-  // const series = stack(data);
-
-  const changeVata = vata => {
-    setVata(vata)
-  }
+  const [tb,setTb] = useState(null)
+  const [cmeta,setCmeta] = useState(null)
  
   return <div>
       <Routes>
@@ -81,7 +65,9 @@ function App(){
               <Outlet/>
             </div>}>
           <Route path="/" element={<InputView 
-            vata={vata} changeVata={changeVata} />} />
+              setTb={setTb} setCmeta={setCmeta}/>} />
+          <Route path='filter' element={<FilterView
+            cmeta={cmeta} tb={tb} setVata={setVata}></FilterView>}/>
           <Route path="viz" element={<Viz vata={vata} />} />
         </Route>
       </Routes>

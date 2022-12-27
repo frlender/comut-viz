@@ -96,7 +96,7 @@ class YLabels extends Gi{
         this.fs = fsh < fsw? fsh:fsw
         this.g.selectAll('text').data(labels)
             .join('text')
-            .attr('y',d => y(d)+y.bandwidth()/2*1.2)
+            .attr('y',d => y(d)+y.bandwidth()/2*1.4)
             .text(d => d)
             .attr('text-anchor','end')
             .attr('x',this.width-padding)

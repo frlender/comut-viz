@@ -108,3 +108,15 @@ a{
 a:hover{
   color: black;
 }
+
+.tablex{
+  max-width:1000px;
+  overflow-x: scroll;
+  display: block;
+  font-size:.8em
+}
+
+.table td, .table th{
+  vertical-align: middle;
+  padding: 0 .3em 0 .3em
+}
