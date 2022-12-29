@@ -29,14 +29,20 @@ class Gi{
 
 
 class VMmat extends Gi{
-    draw(mat,cl,px=1,py=1,pt=3){
+    draw(mat,cl,px=1,py=1){
         // px, py pt are padding x, padding y, padding triangle
         const self = this
         const rect_width = this.width / mat.shape[1]
         const rect_height = this.height / mat.shape[0]
-        px = px*2 < rect_width ? px : 0
-        py = py*2 < rect_height ? py : 0
-        pt = pt*2 < rect_height ? pt : 0
+        // let pt = 3
+        let pt = rect_width/4
+        // let px = rect_width / 5
+        // let py = rect_height / 5
+        // console.log(pt)
+        px = px*6 < rect_width ? px : 0
+        py = py*6 < rect_height ? py : 0
+        // pt = pt*2 < rect_height ? pt : 0
+        pt = pt > 4 ? 4 : pt
         
         const gs = this.g.selectAll('g').data(mat.data).join('g')
             .attr('transform',

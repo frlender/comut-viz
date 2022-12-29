@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import * as pd from "danfojs";
 import {ComutData} from './ComutData';
 import * as d3 from 'd3';
-import {Meta} from './Misc';
+import {reduceDf} from './Misc';
 
 export default function FilterView(props){
     const [loading, setLoading] = useState(false)
@@ -17,7 +17,7 @@ export default function FilterView(props){
 
     let navigate = useNavigate();
 
-    const limit = 150 // visualiz at most 150 categories
+    const limit = 100 // visualiz at most 150 categories
 
 
     const no_cate_ct = cm =>{
@@ -87,7 +87,7 @@ export default function FilterView(props){
 
     
     useEffect(()=>{
-        console.log('aa')
+        // console.log('aa')
         let div
         let div2
         let div3
@@ -130,14 +130,22 @@ export default function FilterView(props){
             && col3!=='value')
             df.rename(mp,{inplace:true})
 
-        console.log(df.columns)
-        cm = new ComutData(df)
-        if(cm.tb.shape[0] > limit){
-            let sub
-            [thres,sub] = cm.top(limit)
-            cm = new ComutData(sub,cm.samples)
-            setThres(thres)
-        }
+        // console.log(df.columns)
+        let sub, samples;
+        [thres,sub, samples] = reduceDf(df,limit)
+        // console.log('dd1')
+        cm = new ComutData(sub,samples)
+        setThres(thres)
+        // cm = new ComutData(df)
+        // if(cm.tb.shape[0] > limit){
+        //     console.log('dd1')
+        //     let sub
+        //     [thres,sub] = cm.top(limit)
+        //     console.log('dd2')
+        //     cm = new ComutData(sub,cm.samples)
+        //     console.log('dd3')
+        //     setThres(thres)
+        // }
         setCmo(cm)          
         setCm(cm)
         if(props.cmeta){
@@ -197,7 +205,7 @@ export default function FilterView(props){
         
         </div> */}
         {/* <span>{row_count} rows</span> */}
-        {console.log('ddd',cm)}
+        {/* {console.log('ddd',cm)} */}
         {cm &&  <div className="row mt-4 mb-3">
                     <span className="span-input">
                         Keep categories (mutations) that occur in at least &nbsp;     

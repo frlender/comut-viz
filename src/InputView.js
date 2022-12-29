@@ -9,6 +9,7 @@ export default function InputView(props){
     // const [cmeta,setCmeta] = useState(null)
     const [metaTb, setMetaTb] = useState(null)
     const [exampleLoaded,setExampleLoaded] = useState(false)
+    const [showExampleBtn, setShowExampleBtn] = useState(true)
 
     const [sampleCol,setSampleCol] = useState('-')
     const [geneCol,setGeneCol] = useState('-')
@@ -39,6 +40,7 @@ export default function InputView(props){
             const df2 = df.dropNa({ axis: 1 })
             setTb(df2)
             setLoading(false)
+            setShowExampleBtn(false)
         })
       }
 
@@ -88,6 +90,7 @@ export default function InputView(props){
             // df.setIndex({column:df.columns[0],inplace:true,drop:true})
             // setCmeta(new Meta(df,dfo))
             setLoading(false)
+            setShowExampleBtn(false)
         })
     }
 
@@ -108,20 +111,24 @@ export default function InputView(props){
         { tb && !loading &&
             <div className="col-">
                 <button className='btn btn-success btn-i' onClick={()=>{
-                    // setLoading(true)
-                    const sub = tb.loc({columns:[sampleCol,geneCol,mutCol]})
-                    props.setTb(sub)
-                    if(metaTb){
-                        const cols = [metaSampleCol].concat(
-                            metaTb.columns.filter(x=>x!==metaSampleCol))
-                        const dfo = metaTb.loc({columns:cols})
-                        const df2 = dfo.copy()
-                        df2.setIndex({column:df2.columns[0],inplace:true,drop:true})
-                        props.setCmeta(new Meta(df2,dfo))
-                    }
-                    
-                    console.log(sub)
-                    navigate('/filter')
+                    setLoading(true)
+                    setTimeout(()=>{
+                        // console.log('aaa')
+                        const sub = tb.loc({columns:[sampleCol,geneCol,mutCol]})
+                        // console.log('aab')
+                        props.setTb(sub)
+                        if(metaTb){
+                            const cols = [metaSampleCol].concat(
+                                metaTb.columns.filter(x=>x!==metaSampleCol))
+                            const dfo = metaTb.loc({columns:cols})
+                            const df2 = dfo.copy()
+                            df2.setIndex({column:df2.columns[0],inplace:true,drop:true})
+                            props.setCmeta(new Meta(df2,dfo))
+                        }
+                        
+                        // console.log('sub',sub)
+                        navigate('/filter')
+                    })
                 }} disabled={disableNextButton()}>Next</button>
             </div>
         }
@@ -141,7 +148,7 @@ export default function InputView(props){
     {!exampleLoaded &&
     <div className="row">
         <div className="col-">
-            <div className="mb-1">A table of delimited mutation data, commonly a .maf file:</div>
+            <div className="mb-1">A table of mutation data, commonly a .maf file:</div>
             <input className='form-control-i' onChange={readData} type='file' accept='.css,.txt,.tsv,.maf'/>
             {/* <span className="example"><a download target="_blank" href='https://raw.githubusercontent.com/frlender/comut-viz-app/gh-pages/example_input.tsv'>example</a></span> */}
         </div>
@@ -150,10 +157,12 @@ export default function InputView(props){
             <input className='form-control-i' onChange={readSampleMeta} type='file' accept='.css,.txt,.tsv'/>
             {/* <span className="example"><a download target="_blank" href='https://raw.githubusercontent.com/frlender/comut-viz-app/gh-pages/example_sample_meta.tsv'>example</a></span> */}
         </div>
+        {showExampleBtn &&
         <div className="col- pl-5">
            <button className='mt-4 btn btn-success'
                 onClick={()=>loadExample('gallbladder.maf','gallbladder_meta.txt')}>example</button>
         </div>
+        }
     </div>
     }
    
