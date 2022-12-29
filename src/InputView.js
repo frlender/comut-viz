@@ -11,10 +11,14 @@ export default function InputView(props){
     const [exampleLoaded,setExampleLoaded] = useState(false)
     const [showExampleBtn, setShowExampleBtn] = useState(true)
 
-    const [sampleCol,setSampleCol] = useState('-')
-    const [geneCol,setGeneCol] = useState('-')
-    const [mutCol,setMutCol] = useState('-')
-    const [metaSampleCol, setMetaSampleCol] = useState('')
+    const sampleColNames = ['Tumor_Sample_Barcode']
+    const geneColNames = ['Hugo_Symbol']
+    const mutColNames = ['Variant_Classification']
+
+    let [sampleCol,setSampleCol] = useState('-')
+    let [geneCol,setGeneCol] = useState('-')
+    let [mutCol,setMutCol] = useState('-')
+    let [metaSampleCol, setMetaSampleCol] = useState('')
 
     const [fname,setFname] = useState('')
     const [fmeta,setFmeta] = useState('')
@@ -41,6 +45,20 @@ export default function InputView(props){
             setTb(df2)
             setLoading(false)
             setShowExampleBtn(false)
+            df2.columns.forEach(e=>{
+                if(sampleColNames.includes(e) && sampleCol === '-'){
+                    sampleCol = e
+                    setSampleCol(e)
+                }
+                if(geneColNames.includes(e) && geneCol === '-'){
+                    geneCol = e
+                    setGeneCol(e)
+                }
+                if(mutColNames.includes(e) && mutCol === '-'){
+                    mutCol = e
+                    setMutCol(e)
+                }
+            })
         })
       }
 
@@ -67,6 +85,9 @@ export default function InputView(props){
                 setTb(df2)
                 setLoading(false)
                 setExampleLoaded(true)
+                setSampleCol('Tumor_Sample_Barcode')
+                setGeneCol('Hugo_Symbol')
+                setMutCol('Variant_Classification')
             })
         
         if(fmeta)
@@ -124,6 +145,8 @@ export default function InputView(props){
                             const df2 = dfo.copy()
                             df2.setIndex({column:df2.columns[0],inplace:true,drop:true})
                             props.setCmeta(new Meta(df2,dfo))
+                        }else{
+                            props.setCmeta(null)
                         }
                         
                         // console.log('sub',sub)
@@ -173,7 +196,7 @@ export default function InputView(props){
             <div className='row mt-4'>
                 <div className='col-'>Select Columns:</div>
                 <div className='col- pl-2'>
-                    Sample  <select 
+                    Sample  <select value={sampleCol}
                     onChange={(e)=>{setSampleCol(e.target.value)}}>
                         <option>-</option>
                         {tb.columns.map(x=>
@@ -182,7 +205,7 @@ export default function InputView(props){
                     </select>
                 </div>
                 <div className='col- pl-2'>
-                    Gene  <select
+                    Gene  <select value={geneCol}
                     onChange={(e)=>{setGeneCol(e.target.value)}}>
                         <option>-</option>
                         {tb.columns.map(x=>
@@ -191,7 +214,7 @@ export default function InputView(props){
                     </select>
                 </div>
                 <div className='col- pl-2'>
-                    Mutation  <select
+                    Mutation  <select value={mutCol}
                     onChange={(e)=>{setMutCol(e.target.value)}}>
                         <option>-</option>
                         {tb.columns.map(x=>

@@ -35,14 +35,14 @@ class VMmat extends Gi{
         const rect_width = this.width / mat.shape[1]
         const rect_height = this.height / mat.shape[0]
         // let pt = 3
-        let pt = rect_width/4
+        let pt = rect_width/5
         // let px = rect_width / 5
         // let py = rect_height / 5
         // console.log(pt)
         px = px*6 < rect_width ? px : 0
         py = py*6 < rect_height ? py : 0
         // pt = pt*2 < rect_height ? pt : 0
-        pt = pt > 4 ? 4 : pt
+        pt = pt > 3 ? 3 : pt
         
         const gs = this.g.selectAll('g').data(mat.data).join('g')
             .attr('transform',
