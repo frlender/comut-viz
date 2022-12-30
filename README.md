@@ -10,7 +10,7 @@ Current tools for creating comutation plots are either offline packages that req
 
 
 
-![image](https://github.com/frlender/comut-viz/blob/main/legacy/overview.png)
+![image](https://github.com/frlender/comut-viz/blob/main/legacy/overview.jpg)
 
 
 
