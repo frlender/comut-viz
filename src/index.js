@@ -16,35 +16,6 @@ import FilterViewHolder from './FilterViewHolder';
 // import Viz from './Viz';
 import VizHolder from './VizHolder'
 
-// console.log('aa')
-// // import App from './App';
-// // Danfojs for dataframe usage
-// // window.pd = pd;
-// import {DataFrame} from './Panfo';
-
-/* test code for Panfo.js
-let data1 = [[1, 2.3, 3, 4, 5, "girl"], [30, 40.1, 39, 89, 78, "boy"]];
-let index = ["a", "b"];
-let columns = ["col1", "col2", "col3", "col4", "col5", "col6"]
-let dtypes = ["int32", "float32", "int32", "int32", "int32", "string"]
-
-let df = new DataFrame(data1, { index, columns, dtypes });
-let df2 = new pd.DataFrame(data1, { index, columns, dtypes });
-
-df2.iloc({rows:['0:'],columns:['1:3']}).print()
-df.iloc('0:','1:3').print()
-df.iloc(':',[true,false,true,false,true,false]).print()
-df.loc(':',[true,false,true,false,true,false]).print()
-let dff = df.loc(':',[true,false,true,false,true,false])
-
-let d2 = [[1, 2.3, 3, 4, 5, "girl"]];
-let index2 = ["a"];
-let df3 = new DataFrame(d2, { index2, columns, dtypes });
-
-let de = dff.loc(['a'])
-
-console.log(df)
-*/
 
 // DONE filtering do not change sample number
 // DONE add input examples

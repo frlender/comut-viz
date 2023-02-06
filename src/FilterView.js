@@ -3,46 +3,50 @@ import React, { useState, useEffect } from 'react';
 import * as pd from "danfojs";
 import {ComutData} from './ComutData';
 import * as d3 from 'd3';
-import {reduceDf} from './Misc';
+import {FilterData} from './Misc';
 
 export default function FilterView(props){
-    console.log('top',props)
     const [loading, setLoading] = useState(false)
   
     let [thres, setThres] = useState(1)
-    const [cmo,setCmo] = useState(null)
-    let [cm,setCm] = useState(null)
+    let [fd, setFd] = useState(null)
+    let [dfThres,setDfThres] = useState(null)
+    let [cfThres,setCfThres] = useState(null) // cateTable at threshold
+    const [dfThresSampleCt, setDfThresSampleCt] = useState()
+
     let [rmeta, setRmeta] = useState(null) //row meta
     let [cmeta, setCmeta] = useState(null)
-    let [waterfall, setWaterfall] = useState(false)
+    let [waterfall, setWaterfall] = useState(true)
 
     let navigate = useNavigate();
 
     const limit = 100 // visualiz at most 150 categories
 
 
-    const no_cate_ct = cm =>{
-        return cm.samples.length - cm.tb.sample.unique().shape[0]
+    const no_cate_ct = () =>{
+        return fd.samples.length - dfThresSampleCt
     }
 
-    const no_cate_str = cm =>{
-        const have = no_cate_ct(cm) === 1?'has': 'have'
-        return `, ${no_cate_ct(cm)} ${have} no categories.`
+    const no_cate_str = () =>{
+        const ct = no_cate_ct()
+        const have = ct === 1?'has': 'have'
+        return `, ${ct} ${have} no categories.`
     }
 
     const changeThres = function(e){
         thres = parseInt(e.target.value)
-        const sub = cmo.topThres(thres)
-        cm = new ComutData(sub,cmo.samples)
+        const [dfThres,cfThres] = fd.changeThres(thres)
+        setDfThresSampleCt(dfThres.sample.unique().shape[0])
+        
         setThres(thres)
-        setCm(cm)
-        if(cm.mf.shape[0] <= limit && ! cmeta) setWaterfall(true)
-        if(cm.mf.shape[0] > limit && ! cmeta) setWaterfall(false)
+        setDfThres(dfThres)
+        setCfThres(cfThres)
+        if(cfThres.shape[0] <= limit) setWaterfall(true)
+        if(cfThres.shape[0] > limit) setWaterfall(false)
         // props.changeVata({...props.vata, mat:cm.create_vata(limit)})
     }
     
 
-    
     useEffect(()=>{
         // console.log('aa')
         let div
@@ -50,14 +54,9 @@ export default function FilterView(props){
         let div3
         if(!d3.select('#content').empty()){
             div = d3.select('#content').append('div').attr('id','tb')
-            cm.tb.plot('tb').table({autosizable:true})
+            dfThres.plot('tb').table({autosizable:true})
             div2 = d3.select('#content2').append('div').attr('id','rsum')
-            const arr = []
-            cm.rsum.values.forEach((d,i)=>{
-                arr.push([cm.rsum.index[i],d])
-            })
-            new pd.DataFrame(arr,{columns:['category','count']})
-                .plot('rsum').table({autosizable:true})
+            cfThres.plot('rsum').table({autosizable:true})
         }
 
         if(!d3.select('#content3').empty()){
@@ -88,29 +87,22 @@ export default function FilterView(props){
             df.rename(mp,{inplace:true})
 
         // console.log(df.columns)
-        let sub, samples;
-        [thres,sub, samples] = reduceDf(df,limit)
-        // console.log('dd1')
-        cm = new ComutData(sub,samples)
-        setThres(thres)
-        // cm = new ComutData(df)
-        // if(cm.tb.shape[0] > limit){
-        //     console.log('dd1')
-        //     let sub
-        //     [thres,sub] = cm.top(limit)
-        //     console.log('dd2')
-        //     cm = new ComutData(sub,cm.samples)
-        //     console.log('dd3')
-        //     setThres(thres)
-        // }
-        setCmo(cm)          
-        setCm(cm)
+        const fd = new FilterData(df,limit)
+        const [dfThres,cfThres] = fd.changeThres(fd.thres)
+        
+        setFd(fd)
+        setThres(fd.thres)
+        setDfThres(dfThres)
+        setDfThresSampleCt(dfThres.sample.unique().shape[0])
+        setCfThres(cfThres)
+
+
         if(props.cmeta){
             setCmeta(props.cmeta)
         }
         // setLoading(false)
-        if(cm.mf.shape[0] <= limit && ! props.cmeta) setWaterfall(true)
-        if(cm.mf.shape[0] > limit && ! props.cmeta) setWaterfall(false)
+        // if(cm.mf.shape[0] <= limit && ! props.cmeta) setWaterfall(true)
+        // if(cm.mf.shape[0] > limit) setWaterfall(false)
     },[])
 
     return <div className='container-fluid container-pad'>
@@ -120,11 +112,12 @@ export default function FilterView(props){
                     loading ...
                 </div>
             }
-            { cm && !loading &&
+            { dfThres && !loading &&
                 <div className="col-">
                     <button className='btn btn-success btn-i' onClick={()=>{
                         setLoading(true)
                         setTimeout(()=>{
+                            const cm = new ComutData(dfThres,fd.samples)
                             const vata = cm.create_vata(waterfall)
                             vata.cmeta = {arr:[]}
                             vata.rmeta = {arr:[]}
@@ -143,7 +136,7 @@ export default function FilterView(props){
                 <div className="col- pl-2">
                     <div className="waterfall-sort">
                     <span>waterfall sort: </span>
-                    <input className='checkbox' type="checkbox" onChange={e=>setWaterfall(e.target.value)} />
+                    <input className='checkbox' type="checkbox" onChange={e=>setWaterfall(!waterfall)} checked={waterfall}/>
                     </div>
                 </div>
             }
@@ -163,26 +156,27 @@ export default function FilterView(props){
         </div> */}
         {/* <span>{row_count} rows</span> */}
         {/* {console.log('ddd',cm)} */}
-        {cm &&  <div className="row mt-4 mb-3">
+        {dfThres &&  <div className="row mt-4 mb-3">
                     <span className="span-input">
                         Keep categories (mutations) that occur in at least &nbsp;     
                     </span>
                     <input type='number' value={thres} min='1' 
-                    max={cm.rsum.values[0]} onChange={changeThres} />
+                    max={fd.sortedPairs[0][1]} onChange={changeThres} />
                     <span className="span-input"> &nbsp; samples.</span>
                 </div>}
         <div className="row">
-            {cm && <div className="col- table">
-                        <div>Input table size: {cm.tb.shape[0]}x{cm.tb.shape[1]}. &nbsp;&nbsp;&nbsp; {cm.samples.length} unique samples{no_cate_ct(cm) ===0?'.':no_cate_str(cm)}  &nbsp;&nbsp;&nbsp; {cm.tb.value.unique().shape[0]} unique values.</div>
+            {console.log(dfThres)}
+            {dfThres && <div className="col- table">
+                        <div>Input table size: {dfThres.shape[0]}x{dfThres.shape[1]}. &nbsp;&nbsp;&nbsp; {dfThresSampleCt} unique samples{no_cate_ct() ===0?'.':no_cate_str()}  &nbsp;&nbsp;&nbsp; {dfThres.value.unique().shape[0]} unique values.</div>
                         <div id='content'/>
                     </div>}
 
-            {cm && <div className="col- table">
-                        <div>There are {cm.mf.shape[0]} categories passing current filtering criterion. </div>
+            {dfThres && <div className="col- table">
+                        <div>There are {cfThres.shape[0]} categories passing current filtering criterion. </div>
                         <div id='content2'/>
                     </div>}
 
-            { cmeta && <div className="col- table">
+            { dfThres && <div className="col- table">
                             <div>Sample metadata size: {cmeta.tb.shape[0]}x{cmeta.tb.shape[1]}.</div>
                             <div id='content3' />
                 </div>}
