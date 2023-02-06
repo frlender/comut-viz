@@ -6,6 +6,7 @@ import * as d3 from 'd3';
 import {reduceDf} from './Misc';
 
 export default function FilterView(props){
+    console.log('top',props)
     const [loading, setLoading] = useState(false)
   
     let [thres, setThres] = useState(1)
@@ -40,50 +41,6 @@ export default function FilterView(props){
         // props.changeVata({...props.vata, mat:cm.create_vata(limit)})
     }
     
-    // const readFile = function(e,cb){
-    //     // cb must setLoading(false)
-    //     setLoading(true)
-    //     const file = e.target.files[0]
-    //     pd.readCSV(file,{'header':true,'skipEmptyLines':true}).then(cb)
-    // }
-
-    // const readData = function(e){
-    //     // console.log(e)
-    //     readFile(e,df => {
-    //         cm = new ComutData(df)
-    //         setCmo(cm)
-    //         if(cm.tb.shape[0] > limit){
-    //           let sub
-    //           [thres,sub] = cm.top(limit)
-    //           cm = new ComutData(sub,cm.samples)
-    //           setThres(thres)
-    //         }          
-    //         // console.log(cm)
-    //       //   props.changeVata({...props.vata, mat:cm.create_vata(limit)})
-    //         setCm(cm)
-    //         setLoading(false)
-    //         if(cm.mf.shape[0] <= limit && ! cmeta) setWaterfall(true)
-    //         if(cm.mf.shape[0] > limit && ! cmeta) setWaterfall(false)
-    //     })
-    //   }
-    
-    // const readSampleMeta = function(e){
-    //     readFile(e, df =>{
-    //         // const df = new DataFrame(df_.values,{
-    //         //     'columns': df_.columns,
-    //         //     'index': df_.index
-    //         // })
-    //         // console.log(df)
-    //         // df.old().print()
-    //         // df.print()
-    //         const dfo = df.copy()
-    //         df.setIndex({column:'sample',inplace:true,drop:true})
-    //         setCmeta(new Meta(df,dfo))
-    //         setLoading(false)
-    //         setWaterfall(false)
-    //     })
-    // }
-
 
     
     useEffect(()=>{

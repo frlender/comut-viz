@@ -6,6 +6,7 @@ import {colors, VMmat, YLabels, XLabels, Legend, Bar, YBar,
 import ColorPicker from './ColorPicker';
 import {Counter} from './ComutData';
 
+
 function get_cl_mp(values){
     const cl = d3.scaleOrdinal(colors)
         .domain(values)

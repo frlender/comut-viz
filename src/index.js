@@ -12,8 +12,9 @@ import './index.css';
 import React, { useState } from 'react';
 
 import InputView from './InputView'
-import FilterView from './FilterView';
-import Viz from './Viz';
+import FilterViewHolder from './FilterViewHolder';
+// import Viz from './Viz';
+import VizHolder from './VizHolder'
 
 // console.log('aa')
 // // import App from './App';
@@ -66,9 +67,9 @@ function App(){
             </div>}>
           <Route path="/" element={<InputView 
               setTb={setTb} setCmeta={setCmeta}/>} />
-          <Route path='filter' element={<FilterView
-            cmeta={cmeta} tb={tb} setVata={setVata}></FilterView>}/>
-          <Route path="viz" element={<Viz vata={vata} />} />
+          <Route path='filter' element={<FilterViewHolder
+            cmeta={cmeta} tb={tb} setVata={setVata}></FilterViewHolder>}/>
+          <Route path="viz" element={<VizHolder vata={vata} />} />
         </Route>
       </Routes>
     </div>
