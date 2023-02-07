@@ -40,7 +40,7 @@ export default function InputView(props){
     const readData = function(e){
         // console.log(e)
         readFile(e,df => {
-            console.log(df)
+            // console.log(df)
             const df2 = df.dropNa({ axis: 1 })
             setTb(df2)
             setLoading(false)
@@ -221,6 +221,9 @@ export default function InputView(props){
                         <option disabled={disableOption(x)}
                         key={'mutation'+x}>{x}</option>)}
                     </select>
+                </div>
+                <div className='col- pl-5'>
+                    Table size: {tb.shape[0]}x{tb.shape[1]} 
                 </div>
             </div>
             <div className='row mt-3'>

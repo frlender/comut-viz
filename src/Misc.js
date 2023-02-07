@@ -54,7 +54,8 @@ function get_fs(len,width,height){
 
 class FilterData{
     constructor(df,limit){
-        const ct = _.countBy(df.category.values)
+        const ct = _.mapValues(_.groupBy(df.values,x=>x[1]),
+            vals=>_.uniqBy(vals,x=>x[0]).length)
         const pairs = _.toPairs(ct)
         const sortedPairs = _.sortBy(pairs,x=>-x[1])
         let thres = 1

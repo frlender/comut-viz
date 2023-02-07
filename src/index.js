@@ -16,7 +16,8 @@ import FilterViewHolder from './FilterViewHolder';
 // import Viz from './Viz';
 import VizHolder from './VizHolder'
 
-
+// adjust loading ... position
+// able to change the names of the legends.
 // DONE filtering do not change sample number
 // DONE add input examples
 // DONE Make waterfall sort checkbox more salient.

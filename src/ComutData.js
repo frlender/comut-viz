@@ -133,29 +133,29 @@ class ComutData{
         return 0
     }
 
-    top(limit=150){
-        const max = this.rsum.values[0]
-        const rg = [...Array(max+1).keys()].reverse().slice(0,max)
-        let thres;
-        rg.every((d,i)=>{
-            const ct = this.rsum.ge(d).sum()
-            const ct2 = this.rsum.ge(d-1).sum()
-            if((ct<=limit && ct2>limit) || d===1){
-                thres = d
-                return false
-            }
-            return true
-        })
-        const top_cates = this.rsum.loc(this.rsum.ge(thres)).index
-        const sub = this.tb.loc({rows:this.tb.category.map(d=>top_cates.includes(d))})
-        return [thres,sub]
-    }
+    // top(limit=150){
+    //     const max = this.rsum.values[0]
+    //     const rg = [...Array(max+1).keys()].reverse().slice(0,max)
+    //     let thres;
+    //     rg.every((d,i)=>{
+    //         const ct = this.rsum.ge(d).sum()
+    //         const ct2 = this.rsum.ge(d-1).sum()
+    //         if((ct<=limit && ct2>limit) || d===1){
+    //             thres = d
+    //             return false
+    //         }
+    //         return true
+    //     })
+    //     const top_cates = this.rsum.loc(this.rsum.ge(thres)).index
+    //     const sub = this.tb.loc({rows:this.tb.category.map(d=>top_cates.includes(d))})
+    //     return [thres,sub]
+    // }
 
-    topThres(thres){
-        const top_cates = this.rsum.loc(this.rsum.ge(thres)).index
-        const sub = this.tb.loc({rows:this.tb.category.map(d=>top_cates.includes(d))})
-        return sub
-    }
+    // topThres(thres){
+    //     const top_cates = this.rsum.loc(this.rsum.ge(thres)).index
+    //     const sub = this.tb.loc({rows:this.tb.category.map(d=>top_cates.includes(d))})
+    //     return sub
+    // }
 
     waterfall_mf(){
         const cols = waterfall_sort(this.mf)
@@ -214,7 +214,8 @@ class ComutData{
         val_count = (multiple === 0 ? val_count :
             val_count.append([multiple],['multiple']))
         const values = val_count.sortValues({ascending:false}).index
-
+        
+        console.log(this)
         return {
             rects: {
                 data: rect_data,

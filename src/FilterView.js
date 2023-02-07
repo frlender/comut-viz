@@ -20,7 +20,7 @@ export default function FilterView(props){
 
     let navigate = useNavigate();
 
-    const limit = 100 // visualiz at most 150 categories
+    const limit = 60 // visualiz at most 150 categories
 
 
     const no_cate_ct = () =>{
@@ -108,7 +108,7 @@ export default function FilterView(props){
     return <div className='container-fluid container-pad'>
         <div className="row input-status mb-2 mt-2">
             { loading &&
-                <div className="col-">
+                <div className="col- loading">
                     loading ...
                 </div>
             }
@@ -132,7 +132,7 @@ export default function FilterView(props){
                 </div>
             }
             {
-            cmeta &&
+            // cmeta &&
                 <div className="col- pl-2">
                     <div className="waterfall-sort">
                     <span>waterfall sort: </span>
@@ -165,7 +165,7 @@ export default function FilterView(props){
                     <span className="span-input"> &nbsp; samples.</span>
                 </div>}
         <div className="row">
-            {console.log(dfThres)}
+            {/* {console.log(dfThres)} */}
             {dfThres && <div className="col- table">
                         <div>Input table size: {dfThres.shape[0]}x{dfThres.shape[1]}. &nbsp;&nbsp;&nbsp; {dfThresSampleCt} unique samples{no_cate_ct() ===0?'.':no_cate_str()}  &nbsp;&nbsp;&nbsp; {dfThres.value.unique().shape[0]} unique values.</div>
                         <div id='content'/>
@@ -176,7 +176,7 @@ export default function FilterView(props){
                         <div id='content2'/>
                     </div>}
 
-            { dfThres && <div className="col- table">
+            { cmeta && <div className="col- table">
                             <div>Sample metadata size: {cmeta.tb.shape[0]}x{cmeta.tb.shape[1]}.</div>
                             <div id='content3' />
                 </div>}

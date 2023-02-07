@@ -57,7 +57,7 @@ export default function Viz(props){
 
     const [cl_mp,setCl_mp] = useState(cl_mp_init(props))
 
-    const [wh, setWh] = useState([800,500])
+    const [wh, setWh] = useState([800,700])
 
     const changeCl = function(color){
         if('label' in cl_info){
