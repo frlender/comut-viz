@@ -183,9 +183,14 @@ export default function InputView(props){
         {showExampleBtn &&
         <div className="col- pl-5">
            <button className='mt-4 btn btn-success'
-                onClick={()=>loadExample('gallbladder.maf','gallbladder_meta.txt')}>example</button>
-        </div>
-        }
+                onClick={()=>loadExample('gallbladder.maf','gallbladder_meta.txt')}>example 5k</button>
+             <button className='ml-2 mt-4 btn btn-success'
+                onClick={()=>loadExample('TCGA-LUSC.maf')}>example 141k</button>
+        </div>}
+        {/* {showExampleBtn &&
+        <div className="col- pl-5">
+          
+        </div>} */}
     </div>
     }
    

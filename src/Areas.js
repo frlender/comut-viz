@@ -205,7 +205,7 @@ class Bar extends Gi{
         if(mode==='xbar'){
             // lw is long width, sw is short width
             this.lw = this.width
-            this.sw = this.height-1
+            this.sw = this.height-2.5
             this.lkey = 'width'
             this.skey = 'height'
             this.lcoord = 'x'
@@ -219,6 +219,19 @@ class Bar extends Gi{
                         .range(s.range().reverse())
                 this.g.call(d3.axisLeft(sr).ticks(4))
                         .call(g => g.select('.domain').remove())
+                console.log(this.g,'abc','c')
+                const offset = 0.3
+                this.g.selectAll('g.tick').each(function(d){
+                    const gtick = d3.select(this)
+                    const trans = gtick.attr('transform')
+                            .replace('translate(','[')
+                            .replace(')',']')
+                    const [tx,ty] = eval(trans)
+                    gtick.attr('transform',`translate(${tx},${ty-offset})`)
+                })
+                this.g.selectAll('.tick > text')
+                    .attr('dy','0.2em')
+                    // .attr('font-size','1')
                 }
         }else{
             this.lw = this.height
@@ -230,8 +243,9 @@ class Bar extends Gi{
             this.translate = (lcoord,scoord) => {
                 return `translate(${scoord},${lcoord})`}
             this.get_scoord = (d,max) => d.start
-            this.s_axis = s => {
-                this.g.call(d3.axisTop(s).ticks(3))
+            this.s_axis = (s) => {
+                const tickCt = s.domain()[1] > 100 ? 2 : 3
+                this.g.call(d3.axisTop(s).ticks(tickCt))
                         .call(g => g.select('.domain').remove())
             }
         }

@@ -173,7 +173,7 @@ export default function Viz(props){
         
         const indi_height = vata.cmeta.arr.length*indi_height_each
 
-        const vm = new VMmat(svg,ylabel_width,xbar_height+margin+indi_height,
+        const vm = new VMmat(svg,ylabel_width,margin+xbar_height+indi_height,
                 width-ylabel_width-ybar_width-margin,
                 height-xbar_height-xlabel_height-margin-indi_height)
                 .draw(vata.rects,cl_mp.vm)
