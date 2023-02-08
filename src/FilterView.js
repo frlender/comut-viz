@@ -66,10 +66,6 @@ export default function FilterView(props){
             div3 = d3.select('#content3').append('div').attr('id','cmeta_tb')
             cmeta.tbo.plot('cmeta_tb').table()
         }
-
-        // add footer text
-        const year = new Date().getFullYear();
-        document.getElementsByClassName('footer-inner')[0].textContent = `2015-${year} 3D Medicines Corporation`;
         
         return ()=>{
             if(div) div.remove()

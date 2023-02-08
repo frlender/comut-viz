@@ -9,7 +9,7 @@ import {
 import reportWebVitals from './reportWebVitals';
 import './bootstrap.min.css';
 import './index.css';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import InputView from './InputView'
 import FilterViewHolder from './FilterViewHolder';
@@ -32,6 +32,12 @@ function App(){
   const [vata,setVata] = useState(null)
   const [tb,setTb] = useState(null)
   const [cmeta,setCmeta] = useState(null)
+
+  useEffect(()=>{
+     // add footer text
+     const year = new Date().getFullYear();
+     document.getElementsByClassName('footer-inner')[0].textContent = `2015-${year} 3D Medicines Corporation`;
+  })
  
   return <div>
       <Routes>

@@ -160,4 +160,10 @@ class FilterData{
 //     }
 // }
 
-export {Meta,get_fs,FilterData}
+function get_transform_xy(transformStr){
+    const ts = transformStr.replace('translate(','[')
+                    .replace(')',']')
+    return eval(ts)
+}
+
+export {Meta,get_fs,get_transform_xy,FilterData}

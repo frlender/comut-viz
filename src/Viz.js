@@ -207,13 +207,16 @@ export default function Viz(props){
             indis.push(indi)
         })
 
+        vm.interact(svg,margin,ylabels,ybar)
+
+
         // console.log(wh)
         
         // // start to draw legend on a separate svg
        
 
         const lg_width = margin*5
-        const lg_height = margin*6
+        const lg_height = margin*8
         const grad_lg_width = margin*3
         const grad_lg_height = margin*5
 
@@ -264,6 +267,7 @@ export default function Viz(props){
         const pct_lg = new Legend(svg_lg,accu,margin,
                     lg_width,lg_height/3)
                     .draw(cl_mp[item_pct_lg.id],item_pct_lg,setCl_info)
+        
         
 
         return () => {

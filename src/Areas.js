@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import * as convert from 'color-convert'
-import {get_fs} from './Misc'
+import {get_fs, get_transform_xy} from './Misc'
 
 // 12 colors based on d3.schemeCategory10 and d3.schemePaired
 const colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#e377c2', '#9467bd', 
@@ -85,7 +85,59 @@ class VMmat extends Gi{
             })
 
         this.cl = cl
+        this.gs = gs
+        this.rect_height = rect_height
+        this.rect_width = rect_width
         return this
+    }
+    interact(svg,margin,ylabels,ybar){
+        const topHeight = this.gy-margin
+
+        const decorate = (rect)=>{
+            rect.attr('fill','none')
+            .attr('stroke','black')
+            .attr('stroke-width',1)
+        }
+        const rect_height = this.rect_height*1.3
+        const rect_width = this.rect_width*1.2
+        const wdiff = rect_width - this.rect_width
+        const vm_x = this.gx
+        this.gs.on('mouseover',function(e){
+            const gv = d3.select(this)
+            const [x,y] = get_transform_xy(
+                gv.attr('transform'))
+            
+            let g
+            if(rect_width > 5){
+                g = svg.append('g').attr('name','focus')
+                const tx = vm_x+x
+                g.attr('transform',`translate(${tx-wdiff/2*1.6},${margin})`)
+                    .append('rect')
+                    .attr('width', rect_width)
+                    .attr('height', topHeight)
+                    .call(decorate)
+            }
+
+            if(rect_height > 5){
+                g = ylabels.g.append('g').attr('name','focus')
+                g.attr('transform',`translate(0,${y-3})`)
+                    .append('rect')
+                    .attr('width', ylabels.width)
+                    .attr('height', rect_height)
+                    .call(decorate)
+                
+                g = ybar.g.append('g').attr('name','focus')
+                g.attr('transform',`translate(0,${y-2})`)
+                    .append('rect')
+                    .attr('width', ybar.width)
+                    .attr('height', rect_height)
+                    .call(decorate)
+            }
+            
+                
+        }).on('mouseout',function(e){
+            d3.selectAll('[name="focus"]').remove()
+        })
     }
 }
 
@@ -102,7 +154,7 @@ class YLabels extends Gi{
         this.fs = fsh < fsw? fsh:fsw
         this.g.selectAll('text').data(labels)
             .join('text')
-            .attr('y',d => y(d)+y.bandwidth()/2*1.4)
+            .attr('y',d => y(d)+y.bandwidth()/2*1.6)
             .text(d => d)
             .attr('text-anchor','end')
             .attr('x',this.width-padding)
@@ -359,6 +411,8 @@ class YBar extends Gi{
             .attr('x',gx-padding)
             .attr('font-size',`${fs}px`)
         
+        return this
+        
     }
 }
 
@@ -367,9 +421,11 @@ class Legend extends Gi{
     draw(cl,item,setCl_info,padding=3){
         const area_width = this.width*3/10
         const label_width = this.width*7/10
+        const max_rect_height = 12
+        const max_rect_width = 40
     
         const title_height = lg_title_height
-        const height = this.height - title_height
+        const height_abs = this.height - title_height
         
         const title = item.name
         const labels = item.domain
@@ -381,6 +437,9 @@ class Legend extends Gi{
             .attr('x',padding)
             .attr('font-size',title_fs)
 
+        const bandwidth = height_abs/labels.length
+        const height = bandwidth/2 <= max_rect_height ? height_abs : 
+                height_abs*max_rect_height/(bandwidth/2)
         const y = d3.scaleBand()
                 .domain(labels)
                 .range([0,height])
@@ -389,8 +448,8 @@ class Legend extends Gi{
         let rect_width = area_width*7/10
         let rect_height = y.bandwidth()/2
 
-        rect_width = rect_width > 40 ? 40 : rect_width
-        rect_height = rect_height > 15 ? 15 : rect_height
+        rect_width = rect_width > max_rect_width ? max_rect_width : rect_width
+        rect_height = rect_height > max_rect_height ? max_rect_height : rect_height
 
         const gs = this.g.selectAll('g').data(labels)
             .join('g')
@@ -474,7 +533,7 @@ class GradLegend extends Gi{
             .attr('stop-color',`hsl(${h},${s}%,${lumi_range[1]}%)`)
 
         this.g.append('rect')
-            .attr('y',title_height)
+            .attr('y',title_height/2)
             .attr('width',rect_width)
             .attr('height',rect_height)
             .attr('fill',`url(#${title})`)
@@ -494,7 +553,7 @@ class GradLegend extends Gi{
 
         const g = this.g.append('g')
             .attr('transform',
-                `translate(${rect_width+1},${title_height})`)
+                `translate(${rect_width+1},${title_height/2})`)
         
         // A padding of 1px removes bottom overhang of the 1st tick of axis 
         // because of its line width. 
