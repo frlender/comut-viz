@@ -21,7 +21,8 @@ export default function FilterView(props){
     let navigate = useNavigate();
 
     const limit = 60 // visualiz at most 150 categories
-
+    const colMp = {'category':'gene','value':'mutation type'}
+    const colMp2 = {'gene':'category','mutation type':'value'}
 
     const no_cate_ct = () =>{
         return fd.samples.length - dfThresSampleCt
@@ -30,14 +31,16 @@ export default function FilterView(props){
     const no_cate_str = () =>{
         const ct = no_cate_ct()
         const have = ct === 1?'has': 'have'
-        return `, ${ct} ${have} no categories.`
+        return `, ${ct} ${have} no mutated genes.`
     }
 
     const changeThres = function(e){
         thres = parseInt(e.target.value)
         const [dfThres,cfThres] = fd.changeThres(thres)
         setDfThresSampleCt(dfThres.sample.unique().shape[0])
-        
+        dfThres.rename(colMp,{inplace:true})
+        cfThres.rename(colMp,{inplace:true})
+
         setThres(thres)
         setDfThres(dfThres)
         setCfThres(cfThres)
@@ -89,7 +92,9 @@ export default function FilterView(props){
         // console.log(df.columns)
         const fd = new FilterData(df,limit)
         const [dfThres,cfThres] = fd.changeThres(fd.thres)
-        
+        dfThres.rename(colMp,{inplace:true})
+        cfThres.rename(colMp,{inplace:true})
+
         setFd(fd)
         setThres(fd.thres)
         setDfThres(dfThres)
@@ -117,6 +122,13 @@ export default function FilterView(props){
                     <button className='btn btn-success btn-i' onClick={()=>{
                         setLoading(true)
                         setTimeout(()=>{
+                            // console.log('a')
+                            try{
+                                dfThres.rename(colMp2,{inplace:true})
+                            }catch(err){
+                                // do nothing. This is a bug of DanfoJS package
+                            }
+                            // console.log('abb')
                             const cm = new ComutData(dfThres,fd.samples)
                             const vata = cm.create_vata(waterfall)
                             vata.cmeta = {arr:[]}
@@ -158,7 +170,7 @@ export default function FilterView(props){
         {/* {console.log('ddd',cm)} */}
         {dfThres &&  <div className="row mt-4 mb-3">
                     <span className="span-input">
-                        Keep categories (mutations) that occur in at least &nbsp;     
+                        Keep genes with mutations occurring in at least &nbsp;     
                     </span>
                     <input type='number' value={thres} min='1' 
                     max={fd.sortedPairs[0][1]} onChange={changeThres} />
@@ -167,12 +179,12 @@ export default function FilterView(props){
         <div className="row">
             {/* {console.log(dfThres)} */}
             {dfThres && <div className="col- table">
-                        <div>Input table size: {dfThres.shape[0]}x{dfThres.shape[1]}. &nbsp;&nbsp;&nbsp; {dfThresSampleCt} unique samples{no_cate_ct() ===0?'.':no_cate_str()}  &nbsp;&nbsp;&nbsp; {dfThres.value.unique().shape[0]} unique values.</div>
+                        <div>Input table size: {dfThres.shape[0]}x{dfThres.shape[1]}. &nbsp;&nbsp;&nbsp; {fd.samples.length} unique samples{no_cate_ct() ===0?'.':no_cate_str()}  &nbsp;&nbsp;&nbsp; {dfThres['mutation type'].unique().shape[0]} unique mutation types.</div>
                         <div id='content'/>
                     </div>}
 
             {dfThres && <div className="col- table">
-                        <div>There are {cfThres.shape[0]} categories passing current filtering criterion. </div>
+                        <div>There are {cfThres.shape[0]} genes passing current filtering criterion. </div>
                         <div id='content2'/>
                     </div>}
 

@@ -16,9 +16,11 @@ import FilterViewHolder from './FilterViewHolder';
 // import Viz from './Viz';
 import VizHolder from './VizHolder'
 
-// add 141k example
-// adjust loading ... position
-// able to change the names of the legends.
+
+// make legend font size bigger for 141k example
+// DONE 141k example
+// DONE loading ... position
+// DONE to change the names of the legends.
 // DONE filtering do not change sample number
 // DONE add input examples
 // DONE Make waterfall sort checkbox more salient.

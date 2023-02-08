@@ -281,14 +281,14 @@ export default function Viz(props){
         </div>
         <div className="row mb-2">
             <span className="span-input">
-                Keep categories (mutations) that occur in at least &nbsp;  
+                Keep genes with mutations occurring in at least &nbsp;  
             </span>
             <input type='number' value={vata.rows.min} 
                 min={props.vata.rows.min} 
                 max={props.vata.rows.max} 
                 onChange={changeMin}/> 
             <span className="span-input"> &nbsp; samples.
-                <span className='ml-3'>{vata.rows.cates.length} categories. </span> 
+                <span className='ml-3'>{vata.rows.cates.length} genes. </span> 
                 <span className='ml-3'>{vata.cols.samples.length} samples. </span>
             </span>
               

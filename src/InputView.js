@@ -4,7 +4,7 @@ import * as pd from "danfojs";
 import {Meta} from './Misc';
 
 export default function InputView(props){
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(null)
     const [tb,setTb] = useState(null)
     // const [cmeta,setCmeta] = useState(null)
     const [metaTb, setMetaTb] = useState(null)
@@ -32,7 +32,7 @@ export default function InputView(props){
 
     const readFile = function(e,cb){
         // cb must setLoading(false)
-        setLoading(true)
+        setLoading('loading ...')
         const file = e.target.files[0]
         pd.readCSV(file,{'header':true,'skipEmptyLines':true}).then(cb)
     }
@@ -74,13 +74,15 @@ export default function InputView(props){
     //         })
     //   }
       const loadExample = function(fname,fmeta){
-        setLoading(true)
+        const loadStr = fname === 'TCGA-LUSC.maf' ? 
+            'loading ... (may take about 1 min)' : 'loading...'
+        setLoading(loadStr)
         setFname(fname)
         if(fmeta) setFmeta(fmeta)
 
         pd.readCSV(`/comut-viz-app/${fname}`,{'header':true,'skipEmptyLines':true})
             .then(df=>{
-                console.log(df)
+                // console.log(df)
                 const df2 = df.dropNa({ axis: 1 })
                 setTb(df2)
                 setLoading(false)
@@ -126,13 +128,13 @@ export default function InputView(props){
     <div className="row input-status mb-2 mt-2">
         { loading &&
             <div className="col-">
-                loading ...
+                {loading}
             </div>
         }
         { tb && !loading &&
             <div className="col-">
                 <button className='btn btn-success btn-i' onClick={()=>{
-                    setLoading(true)
+                    setLoading('loading ...')
                     setTimeout(()=>{
                         // console.log('aaa')
                         const sub = tb.loc({columns:[sampleCol,geneCol,mutCol]})

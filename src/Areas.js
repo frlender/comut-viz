@@ -219,7 +219,7 @@ class Bar extends Gi{
                         .range(s.range().reverse())
                 this.g.call(d3.axisLeft(sr).ticks(4))
                         .call(g => g.select('.domain').remove())
-                console.log(this.g,'abc','c')
+                // console.log(this.g,'abc','c')
                 const offset = 0.3
                 this.g.selectAll('g.tick').each(function(d){
                     const gtick = d3.select(this)

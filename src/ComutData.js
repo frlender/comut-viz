@@ -215,7 +215,7 @@ class ComutData{
             val_count.append([multiple],['multiple']))
         const values = val_count.sortValues({ascending:false}).index
         
-        console.log(this)
+        // console.log(this)
         return {
             rects: {
                 data: rect_data,
