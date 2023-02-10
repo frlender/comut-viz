@@ -92,7 +92,8 @@ class VMmat extends Gi{
     }
     interact(svg,margin,ylabels,ybar){
         const topHeight = this.gy-margin
-
+        const width_show_thres = 3
+        const height_show_thres = 5
         const decorate = (rect)=>{
             rect.attr('fill','none')
             .attr('stroke','black')
@@ -108,7 +109,7 @@ class VMmat extends Gi{
                 gv.attr('transform'))
             
             let g
-            if(rect_width > 5){
+            if(rect_width > width_show_thres){
                 g = svg.append('g').attr('name','focus')
                 const tx = vm_x+x
                 g.attr('transform',`translate(${tx-wdiff/2*1.6},${margin})`)
@@ -118,7 +119,7 @@ class VMmat extends Gi{
                     .call(decorate)
             }
 
-            if(rect_height > 5){
+            if(rect_height > height_show_thres){
                 g = ylabels.g.append('g').attr('name','focus')
                 g.attr('transform',`translate(0,${y-3})`)
                     .append('rect')

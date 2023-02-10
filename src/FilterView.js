@@ -166,7 +166,7 @@ export default function FilterView(props){
         {/* {console.log('ddd',cm)} */}
         {dfThres &&  <div className="row mt-4 mb-3">
                     <span className="span-input">
-                        Keep genes with mutations occurring in at least &nbsp;     
+                        Keep genes mutated in at least &nbsp;     
                     </span>
                     <input type='number' value={thres} min='1' 
                     max={fd.sortedPairs[0][1]} onChange={changeThres} />
@@ -175,12 +175,12 @@ export default function FilterView(props){
         <div className="row">
             {/* {console.log(dfThres)} */}
             {dfThres && <div className="col- table">
-                        <div>Input table size: {dfThres.shape[0]}x{dfThres.shape[1]}. &nbsp;&nbsp;&nbsp; {fd.samples.length} unique samples{no_cate_ct() ===0?'.':no_cate_str()}  &nbsp;&nbsp;&nbsp; {dfThres['mutation type'].unique().shape[0]} unique mutation types.</div>
+                        <div>Filtered table size: {dfThres.shape[0]}x{dfThres.shape[1]}. &nbsp;&nbsp;&nbsp; {fd.samples.length} samples{no_cate_ct() ===0?'.':no_cate_str()}  &nbsp;&nbsp;&nbsp; {dfThres['mutation type'].unique().shape[0]} mutation types.</div>
                         <div id='content'/>
                     </div>}
 
             {dfThres && <div className="col- table">
-                        <div>There are {cfThres.shape[0]} genes passing current filtering criterion. </div>
+                        <div>There are {cfThres.shape[0]} genes mutated in at least {thres} samples. </div>
                         <div id='content2'/>
                     </div>}
 

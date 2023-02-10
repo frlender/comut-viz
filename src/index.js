@@ -17,7 +17,7 @@ import FilterViewHolder from './FilterViewHolder';
 import VizHolder from './VizHolder'
 
 
-// make legend font size bigger for 141k example
+// DONE make legend font size bigger for 141k example
 // DONE 141k example
 // DONE loading ... position
 // DONE to change the names of the legends.

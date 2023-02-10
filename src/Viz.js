@@ -285,7 +285,7 @@ export default function Viz(props){
         </div>
         <div className="row mb-2">
             <span className="span-input">
-                Keep genes with mutations occurring in at least &nbsp;  
+                Keep genes mutated in at least &nbsp;  
             </span>
             <input type='number' value={vata.rows.min} 
                 min={props.vata.rows.min} 
