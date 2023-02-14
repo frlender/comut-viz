@@ -1,5 +1,6 @@
 
 import * as pd from "danfojs";
+import _ from 'lodash'
 
 // let ct = 0
 
@@ -248,9 +249,11 @@ class ComutData{
         //         cate_val_count: cate_val_ct.arr(this.mat.index)}
     }
 
-    create_vata(waterfall){
+    create_vata(waterfall,samples){
         if(waterfall){
             this.mat = this.waterfall_mf()
+        }else if(!waterfall && !_.isNil(samples)){
+            this.mat = this.mf.loc({columns:samples})
         }else{
             this.mat = this.mf
         }

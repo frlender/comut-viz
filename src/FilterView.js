@@ -124,13 +124,15 @@ export default function FilterView(props){
                             }catch(err){
                                 // do nothing. This is a bug of DanfoJS package
                             }
-                            // console.log('abb')
+                            console.log('abb')
                             const cm = new ComutData(dfThres,fd.samples)
-                            const vata = cm.create_vata(waterfall)
-                            vata.cmeta = {arr:[]}
-                            vata.rmeta = {arr:[]}
+                            let vata;
                             if(cmeta){
+                                vata = cm.create_vata(waterfall,cmeta.tb.index)
                                 vata.cmeta = cmeta.get_vata(vata.cols.samples)
+                            }else{
+                                vata = cm.create_vata(waterfall)
+                                vata.cmeta = {arr:[]}
                             }
                             props.setVata(vata)
                             setLoading(false)
