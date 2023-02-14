@@ -124,3 +124,18 @@ a:hover{
 .loading{
   margin-top: 0.35rem;
 }
+
+.help{
+  float: right;
+  margin-right: 1.2em;
+  vertical-align: 2%;
+}
+
+.help svg{
+  margin-top:-8px
+}
+
+a.help:hover{
+  color:darkblue;
+  cursor:pointer;
+}

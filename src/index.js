@@ -15,6 +15,7 @@ import InputView from './InputView'
 import FilterViewHolder from './FilterViewHolder';
 // import Viz from './Viz';
 import VizHolder from './VizHolder'
+import { BiHelpCircle } from "react-icons/bi";
 
 
 // DONE make legend font size bigger for 141k example
@@ -43,7 +44,10 @@ function App(){
       <Routes>
         <Route path="/" element={
             <div>
-              <div className='header pl-3 pb-3 pt-3 mb-2 border-bottom'>Comut-viz</div>
+              <div className='header pl-3 pb-3 pt-3 mb-2 border-bottom'>
+                Comut-viz               
+                <a href='/comut-viz-app/help.pdf' target='_blank' className='help'><BiHelpCircle></BiHelpCircle></a>
+              </div>
               <Outlet/>
             </div>}>
           <Route path="/" element={<InputView 
