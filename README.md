@@ -1,6 +1,6 @@
 # Comut-viz
 
-### An online app for creating comutation plots
+An online app for creating comutation plots
 
 https://frlender.github.io/comut-viz-app/
 
