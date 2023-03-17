@@ -40,8 +40,9 @@ export default function InputView(props){
     const readData = function(e){
         // console.log(e)
         readFile(e,df => {
-            // console.log(df)
-            const df2 = df.dropNa({ axis: 1 })
+            console.log(df)
+            const df2 = df
+            console.log(df2)
             setTb(df2)
             setLoading(false)
             setShowExampleBtn(false)
