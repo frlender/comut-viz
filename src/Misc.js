@@ -93,7 +93,11 @@ class FilterData{
                 d=>this.ct[d] >= thres
             )
         })
-        return [df,cateTable]
+
+        const mutCounts = df['value'].valueCounts()
+        mutCounts.sortValues({ascending:false,inplace:true})
+
+        return [df,cateTable,mutCounts]
     }
 }
 

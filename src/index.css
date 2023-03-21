@@ -94,6 +94,7 @@ code {
 
 .container-pad{
   padding-left: 38px;
+  /* overflow-anchor: none; */
 }
 
 .example{
@@ -138,4 +139,15 @@ a:hover{
 a.help:hover{
   color:darkblue;
   cursor:pointer;
+}
+
+.mut-counts-div{
+  margin-top: 120px;
+    font-size: 0.83em;
+    margin-left: 70px;
+}
+
+.colx{
+  /* this is crucial. Otherwise, the page will automatically scroll to top in filter view after clicking on checkboxes */
+  min-height: 450px;
 }
