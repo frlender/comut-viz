@@ -214,7 +214,7 @@ export default function FilterView(props){
                         <div id='content'/>
                     </div>}
 
-            {/* {mutCountsThres && <div className="colx table mut-counts-div">
+            {mutCountsThres && <div className="colx table mut-counts-div">
                 <table className=''>
                     <thead>
                         <tr>
@@ -240,7 +240,7 @@ export default function FilterView(props){
                             }
                     </tbody>
                 </table> 
-            </div>} */}
+            </div>}
 
 
             {dfThres && <div className="colx table">
