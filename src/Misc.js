@@ -53,11 +53,21 @@ function get_fs(len,width,height){
 
 
 class FilterData{
-    constructor(df,limit){
-        const ct = _.mapValues(_.groupBy(df.values,x=>x[1]),
+    constructor(df){
+        this.df = df
+        this.ct = _.mapValues(_.groupBy(df.values,x=>x[1]),
             vals=>_.uniqBy(vals,x=>x[0]).length)
-        const pairs = _.toPairs(ct)
-        const sortedPairs = _.sortBy(pairs,x=>-x[1])
+        const pairs = _.toPairs(this.ct)
+        this.sortedPairs = _.sortBy(pairs,x=>-x[1])
+        this.cateTable = new pd.DataFrame(this.sortedPairs,
+            {'columns':['category','count']})
+        this.samples = df.sample.unique().values
+        // this.cates = _.keys(this.ct)
+    }
+    changeLimit(limit){
+        // const df = this.df
+        // const ct = this.ct
+        const sortedPairs = this.sortedPairs
         let thres = 1
         if(sortedPairs.length > limit){
             if(sortedPairs[limit][1]!==sortedPairs[limit-1][1])
@@ -69,18 +79,7 @@ class FilterData{
                 thres = sortedPairs[i][1]
             }
         }
-
-        const cateTable = new pd.DataFrame(sortedPairs,
-            {'columns':['category','count']})
-        
-        this.df = df
-        this.samples = df.sample.unique().values
-        this.ct = ct
-        this.cateTable = cateTable
-        this.cates = _.keys(ct)
-        this.sortedPairs = sortedPairs
-
-        this.thres = thres
+        return thres
     }
 
     changeThres(thres){
@@ -94,10 +93,12 @@ class FilterData{
             )
         })
 
-        const mutCounts = df['value'].valueCounts()
-        mutCounts.sortValues({ascending:false,inplace:true})
+        const mp = _.countBy(df['value'].values)
+        const pp = _.toPairs(mp)
+        const sp = _.sortBy(pp,x=>-x[1])
+        // mutCounts.sortValues({ascending:false,inplace:true})
 
-        return [df,cateTable,mutCounts]
+        return [df,cateTable,sp]
     }
 }
 

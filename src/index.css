@@ -144,8 +144,22 @@ a.help:hover{
 .mut-counts-div{
   margin-top: 120px;
     font-size: 0.83em;
-    margin-left: 70px;
+    margin-left: 75px;
 }
+
+.td-center{
+  text-align: center;
+}
+.td-end{
+  text-align: end;
+}
+.td-pad{
+  padding-right: 5px;
+  padding-left: 15px;
+}
+/* .mut-counts-div > td{
+  min-width: 50px;  
+} */
 
 .colx{
   /* this is crucial. Otherwise, the page will automatically scroll to top in filter view after clicking on checkboxes */

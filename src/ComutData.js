@@ -211,7 +211,14 @@ class ComutData{
         }) // end forEach cate
 
         const sample_count = this.mat.sum({axis:1}) // # of samples of each cate
-        let val_count = df.value.valueCounts()
+        const ct = _.countBy(df['value'].values)
+        const index = []
+        const data = []
+        _.keys(ct).forEach(k=>{
+            index.push(k)
+            data.push(ct[k])
+        })
+        let val_count = new pd.Series(data,{index:index})
         val_count = (multiple === 0 ? val_count :
             val_count.append([multiple],['multiple']))
         const values = val_count.sortValues({ascending:false}).index

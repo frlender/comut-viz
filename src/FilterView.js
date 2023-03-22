@@ -4,6 +4,8 @@ import * as pd from "danfojs";
 import {ComutData} from './ComutData';
 import * as d3 from 'd3';
 import {FilterData} from './Misc';
+import _ from 'lodash'
+
 
 export default function FilterView(props){
     const [loading, setLoading] = useState(false)
@@ -15,8 +17,8 @@ export default function FilterView(props){
     const [dfThresSampleCt, setDfThresSampleCt] = useState()
     let [mutCountsThres, setMutCountsThres] = useState(null)
     let [mutSelect, setMutSelect] = useState({})
+    let dfo = useRef() // original df
 
-    const scroll = useRef([0,0])
 
     let [rmeta, setRmeta] = useState(null) //row meta
     let [cmeta, setCmeta] = useState(null)
@@ -39,26 +41,35 @@ export default function FilterView(props){
         return `, ${ct} ${have} no mutated genes.`
     }
 
-    const changeThres = function(e){
-        thres = parseInt(e.target.value)
+    const changeThres = function(thres,fd){
         const [dfThres,cfThres,mutCountsThres] = fd.changeThres(thres)
         setDfThresSampleCt(dfThres.sample.unique().shape[0])
         dfThres.rename(colMp,{inplace:true})
         cfThres.rename(colMp,{inplace:true})
 
+        mutCountsThres.forEach((item)=>{
+            if(!(item[0] in mutSelect))
+                mutSelect[item[0]]=true
+        })
+
         setThres(thres)
         setDfThres(dfThres)
         setCfThres(cfThres)
+        setMutCountsThres(mutCountsThres)
+        setMutSelect(mutSelect)
         if(cfThres.shape[0] <= waterfall_limit) setWaterfall(true)
         if(cfThres.shape[0] > waterfall_limit) setWaterfall(false)
         // props.changeVata({...props.vata, mat:cm.create_vata(limit)})
     }
 
     const changeMutSelect = key=>{
-        // console.log(window.scrollX,window.scrollY)
-        scroll.current = [window.scrollX, window.scrollY]
         mutSelect[key] = !mutSelect[key]
-        setMutSelect({...mutSelect})
+        const idx = dfo.current['value'].map(v=>v in mutSelect?mutSelect[v]:true)
+        const df = dfo.current.loc({rows:idx})
+        fd = new FilterData(df)
+        changeThres(thres,fd)
+        setFd(fd)
+        // setMutCountsThres(mutCountsThres)
     }
 
     // useLayoutEffect(()=>{
@@ -73,7 +84,7 @@ export default function FilterView(props){
     
 
     useEffect(()=>{
-        console.log('aa')
+        // console.log('aa')
         let div
         let div2
         let div3
@@ -109,20 +120,22 @@ export default function FilterView(props){
         if(Object.keys(mp).length > 0)
             df.rename(mp,{inplace:true})
 
+        dfo.current = df
         // console.log(df.columns)
-        const fd = new FilterData(df,limit)
-        const [dfThres,cfThres,mutCountsThres] = fd.changeThres(fd.thres)
+        const fd = new FilterData(df)
+        const fdThres = fd.changeLimit(limit)
+        const [dfThres,cfThres,mutCountsThres] = fd.changeThres(fdThres)
         dfThres.rename(colMp,{inplace:true})
         cfThres.rename(colMp,{inplace:true})
 
         setFd(fd)
-        setThres(fd.thres)
+        setThres(fdThres)
         setDfThres(dfThres)
         setDfThresSampleCt(dfThres.sample.unique().shape[0])
         setCfThres(cfThres)
         setMutCountsThres(mutCountsThres)
 
-        mutCountsThres.index.forEach((key)=>{
+        df['value'].unique().values.forEach((key)=>{
             mutSelect[key]=true
         })
         setMutSelect(mutSelect)
@@ -145,7 +158,7 @@ export default function FilterView(props){
                     loading ...
                 </div>
             }
-            {console.log('re-render everything')}
+            {/* {console.log('re-render everything')} */}
             { dfThres && !loading &&
                 <div className="col-">
                     <button className='btn btn-success btn-i' onClick={()=>{
@@ -184,19 +197,6 @@ export default function FilterView(props){
                 </div>
             }
         </div>
-        {/* <div className="row">
-            <div className="col-">
-                <div className="mb-1">Mutation data in the format of "sample category value":</div>
-                <input className='form-control-i' onChange={readData} type='file' accept='.css,.txt,.tsv'/>
-                <span className="example"><a download target="_blank" href='https://raw.githubusercontent.com/frlender/comut-viz-app/gh-pages/example_input.tsv'>example</a></span>
-            </div>
-            <div className="col- pl-5">
-                <div className="mb-1">Sample metadata (Optional):</div>
-                <input className='form-control-i' onChange={readSampleMeta} type='file' accept='.css,.txt,.tsv'/>
-                <span className="example"><a download target="_blank" href='https://raw.githubusercontent.com/frlender/comut-viz-app/gh-pages/example_sample_meta.tsv'>example</a></span>
-            </div>
-        
-        </div> */}
         {/* <span>{row_count} rows</span> */}
         {/* {console.log('ddd',cm)} */}
         {dfThres &&  <div className="row mt-4 mb-3">
@@ -204,17 +204,17 @@ export default function FilterView(props){
                         Keep genes mutated in at least &nbsp;     
                     </span>
                     <input type='number' value={thres} min='1' 
-                    max={fd.sortedPairs[0][1]} onChange={changeThres} />
+                    max={fd.sortedPairs[0][1]} onChange={e=>changeThres(parseInt(e.target.value),fd)} />
                     <span className="span-input"> &nbsp; samples.</span>
                 </div>}
         <div className="row">
-            {/* {console.log(dfThres)} */}
+            {console.log(dfThres)}
             {dfThres && <div className="colx table">
                         <div>Filtered table size: {dfThres.shape[0]}x{dfThres.shape[1]}. &nbsp;&nbsp;&nbsp; {fd.samples.length} samples{no_cate_ct() ===0?'.':no_cate_str()}  &nbsp;&nbsp;&nbsp; {dfThres['mutation type'].unique().shape[0]} mutation types.</div>
                         <div id='content'/>
                     </div>}
-{/* 
-            {mutCountsThres && <div className="colx table mut-counts-div">
+
+            {/* {mutCountsThres && <div className="colx table mut-counts-div">
                 <table className=''>
                     <thead>
                         <tr>
@@ -224,12 +224,20 @@ export default function FilterView(props){
                         </tr>
                     </thead>
                     <tbody>
-                            {mutCountsThres.index.map((key,i)=>
-                                <tr key={Math.random()}>
-                                    <td>{key}</td>
-                                    <td>{mutCountsThres.iloc([i]).values[0]}</td>
-                                    <td><input onChange={e=>{changeMutSelect(key)}} checked={mutSelect[key]} type='checkbox'></input></td>
+                            {mutCountsThres.map((item,i)=>
+                                <tr key={item[0]}>
+                                    <td>{item[0]}</td>
+                                    <td className="td-end"><span className="td-pad">{item[1]}</span></td>
+                                    <td className="td-center"><input onChange={e=>{changeMutSelect(item[0])}} checked={mutSelect[item[0]]} type='checkbox'></input></td>
                                 </tr>)}
+                            {_.keys(mutSelect).filter(x=>!mutCountsThres.map(x=>x[0]).includes(x)).map(k=>
+                                <tr key={k}>
+                                    <td>{k}</td>
+                                    <td className="td-end"><span className="td-pad">0</span></td>
+                                    <td className="td-center"><input onChange={e=>{changeMutSelect(k)}} checked={mutSelect[k]} type='checkbox'></input></td>
+                                </tr>)
+
+                            }
                     </tbody>
                 </table> 
             </div>} */}
