@@ -74,7 +74,7 @@ class FilterData{
                 thres = sortedPairs[limit-1][1]
             else{
                 let i = limit-2
-                while(sortedPairs[limit-1][1] === sortedPairs[i][1])
+                while(sortedPairs[limit-1][1] === sortedPairs[i][1] && i > 0)
                     i -= 1
                 thres = sortedPairs[i][1]
             }

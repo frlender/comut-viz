@@ -184,6 +184,7 @@ class ComutData{
 
                     const val_items = []
                     this.vals.forEach((val)=>{
+                        // console.log(val)
                         const qq = qf.value.eq(val)
                         const count = qf.loc({rows:qq}).shape[0]
                         if(count > 0){

@@ -165,3 +165,7 @@ a.help:hover{
   /* this is crucial. Otherwise, the page will automatically scroll to top in filter view after clicking on checkboxes */
   min-height: 450px;
 }
+
+.err{
+  color: red
+}

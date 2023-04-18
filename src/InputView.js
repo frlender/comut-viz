@@ -2,14 +2,17 @@ import React, { useState, useEffect } from 'react';
 import {  useNavigate } from "react-router-dom";
 import * as pd from "danfojs";
 import {Meta} from './Misc';
+import _ from 'lodash'
 
 export default function InputView(props){
     const [loading, setLoading] = useState(null)
-    const [tb,setTb] = useState(null)
+    let [tb,setTb] = useState(null)
     // const [cmeta,setCmeta] = useState(null)
-    const [metaTb, setMetaTb] = useState(null)
+    let [metaTb, setMetaTb] = useState(null)
     const [exampleLoaded,setExampleLoaded] = useState(false)
     const [showExampleBtn, setShowExampleBtn] = useState(true)
+
+    const [errMsg,setErrMsg] = useState('')
 
     const sampleColNames = ['Tumor_Sample_Barcode']
     const geneColNames = ['Hugo_Symbol']
@@ -30,11 +33,19 @@ export default function InputView(props){
     let navigate = useNavigate();
     
 
-    const readFile = function(e,cb){
+    const readFile = function(e,cb,fileAnnot){
         // cb must setLoading(false)
         setLoading('loading ...')
         const file = e.target.files[0]
-        pd.readCSV(file,{'header':true,'skipEmptyLines':true}).then(cb)
+        pd.readCSV(file,{'header':true,'skipEmptyLines':'greedy',
+            'comments':'#'}).then(cb).catch(err=>{
+                // console.log('error inside',err)
+                if(fileAnnot==='maf'){
+                    setErrMsg('MAF file parsing error: '+err)
+                }else{
+                    setErrMsg('Metadata file parsing error: '+err)
+                }
+            })
     }
 
     const readData = function(e){
@@ -59,7 +70,7 @@ export default function InputView(props){
                     mutCol = e
                     setMutCol(e)
                 }
-            })
+            },'maf')
         })
       }
 
@@ -107,15 +118,16 @@ export default function InputView(props){
 
       const readSampleMeta = function(e){
         readFile(e, dfi =>{
-            const df = dfi.dropNa({ axis: 1 })
-            const dfo = df.copy()
+            // const df = dfi.dropNa({ axis: 1 })
+            // const dfo = df.copy()
+            const dfo = dfi
             setMetaTb(dfo)
             setMetaSampleCol(dfo.columns[0])
             // df.setIndex({column:df.columns[0],inplace:true,drop:true})
             // setCmeta(new Meta(df,dfo))
             setLoading(false)
             setShowExampleBtn(false)
-        })
+        },'meta')
     }
 
     useEffect(()=>{
@@ -132,16 +144,61 @@ export default function InputView(props){
                 {loading}
             </div>
         }
+        {errMsg &&
+            <div className="col- err">
+                {errMsg}
+            </div>
+        }
         { tb && !loading &&
             <div className="col-">
                 <button className='btn btn-success btn-i' onClick={()=>{
                     setLoading('loading ...')
                     setTimeout(()=>{
-                        // console.log('aaa')
-                        const sub = tb.loc({columns:[sampleCol,geneCol,mutCol]})
-                        // console.log('aab')
-                        props.setTb(sub)
+                        console.log('abc')
                         if(metaTb){
+                            // check id match
+                            const metaSamples = metaTb[metaSampleCol].unique().values
+                            if(metaSamples.length < metaTb.shape[0]){
+                                const ct = _.countBy(metaTb[metaSampleCol].values)
+                                const dups = _.keys(ct).filter(x=>ct[x]>1)
+                                setErrMsg(`  ERROR: the sample IDs in the metadata file are not unique. These IDs occur more than once: ${dups.join(',')}`)
+                                return
+                            }
+                            const mafSamples = tb[sampleCol].unique().values
+                            const diffLeft = _.difference(mafSamples,metaSamples)
+                            const cmmCount = mafSamples.length - diffLeft.length
+                            if(cmmCount === 0){
+                                setErrMsg('  ERROR: sample IDs in the MAF file do not match those in the metadata file with 0 sample IDs in common. Please check.')
+                                return
+                            }
+                            if(cmmCount > 0 && cmmCount < mafSamples.length){
+                                alert(`${mafSamples.length - cmmCount} out of ${mafSamples.length} samples do not have metadata in the metadata file: \n ${diffLeft.join(',')}. \n\n Please confirm.`)
+
+                                const cmmMap = {}
+                                mafSamples.forEach(x=>{
+                                    if(metaSamples.includes(x))
+                                    cmmMap[x] = true
+                                    else
+                                    cmmMap[x] = false
+                                })
+                                const idx = tb[sampleCol].values.map(x=>cmmMap[x])
+                                tb = tb.iloc({rows:idx})
+
+                                const idx2 = metaTb[metaSampleCol].values.map(x=>{
+                                    if(x in cmmMap && cmmMap[x])
+                                    return true
+                                    else
+                                    return false
+                                })
+                                metaTb = metaTb.iloc({rows:idx2})
+                            }
+                            if(cmmCount === mafSamples.length && cmmCount < 
+                                metaSamples.length){
+                                const idx = metaTb[metaSampleCol].values.map(x=>
+                                    mafSamples.includes(x))
+                                metaTb = metaTb.iloc({rows:idx})
+                            }
+
                             const cols = [metaSampleCol].concat(
                                 metaTb.columns.filter(x=>x!==metaSampleCol))
                             const dfo = metaTb.loc({columns:cols})
@@ -151,7 +208,12 @@ export default function InputView(props){
                         }else{
                             props.setCmeta(null)
                         }
-                        
+
+                         // console.log('aaa')
+                         const sub = tb.loc({columns:[sampleCol,geneCol,mutCol]})
+                         // console.log('aab')
+                         props.setTb(sub)
+
                         // console.log('sub',sub)
                         navigate('/filter')
                     })
@@ -175,12 +237,12 @@ export default function InputView(props){
     <div className="row">
         <div className="col-">
             <div className="mb-1">A table of mutation data, commonly a .maf file:</div>
-            <input className='form-control-i' onChange={readData} type='file' accept='.css,.txt,.tsv,.maf'/>
+            <input className='form-control-i' onChange={readData} type='file' accept='.csv,.txt,.tsv,.maf'/>
             {/* <span className="example"><a download target="_blank" href='https://raw.githubusercontent.com/frlender/comut-viz-app/gh-pages/example_input.tsv'>example</a></span> */}
         </div>
         <div className="col- pl-5">
             <div className="mb-1">Sample metadata (Optional):</div>
-            <input className='form-control-i' onChange={readSampleMeta} type='file' accept='.css,.txt,.tsv'/>
+            <input className='form-control-i' onChange={readSampleMeta} type='file' accept='.csv,.txt,.tsv'/>
             {/* <span className="example"><a download target="_blank" href='https://raw.githubusercontent.com/frlender/comut-viz-app/gh-pages/example_sample_meta.tsv'>example</a></span> */}
         </div>
         {showExampleBtn &&
@@ -204,7 +266,7 @@ export default function InputView(props){
             <div className='row mt-4'>
                 <div className='col-'>Select Columns:</div>
                 <div className='col- pl-2'>
-                    Sample  <select value={sampleCol}
+                    Sample ID  <select value={sampleCol}
                     onChange={(e)=>{setSampleCol(e.target.value)}}>
                         <option>-</option>
                         {tb.columns.map(x=>
@@ -253,7 +315,7 @@ export default function InputView(props){
         <div className='row mt-4'>
             <div className='col-'>Select Columns:</div>
             <div className='col- pl-2'>
-                Sample  <select 
+                Sample ID  <select 
                 onChange={(e)=>{setMetaSampleCol(e.target.value)}}>
                     {metaTb.columns.map(x=>
                     <option key={'sample'+x}>{x}</option>)}

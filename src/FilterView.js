@@ -38,7 +38,9 @@ export default function FilterView(props){
     const no_cate_str = () =>{
         const ct = no_cate_ct()
         const have = ct === 1?'has': 'have'
-        return `, ${ct} ${have} no mutated genes.`
+        return ` (${ct} ${have} no mutated genes),`
+        // return `with ${ct} having no mutated genes`
+
     }
 
     const changeThres = function(thres,fd){
@@ -170,7 +172,21 @@ export default function FilterView(props){
                             }catch(err){
                                 // do nothing. This is a bug of DanfoJS package
                             }
-                            console.log('abb')
+                            // console.log('abb')
+                            // remove lines that contains null
+                            let hasNull = false
+                            const numIdx = []
+                            dfThres.values.forEach((vec,i)=>{
+                                const rowNotNull = _.reduce(vec,(acc,x)=>
+                                    acc && (!_.isNil(x)), true)
+                                hasNull = hasNull | (!rowNotNull)
+                                if(rowNotNull) numIdx.push(i)
+                                // return rowNotNull
+                            })
+                            if(hasNull){
+                                console.log('dfThres has rows with nil values. Removed.')
+                                dfThres = dfThres.iloc({rows:numIdx})
+                            }
                             const cm = new ComutData(dfThres,fd.samples)
                             let vata;
                             if(cmeta){
@@ -208,9 +224,9 @@ export default function FilterView(props){
                     <span className="span-input"> &nbsp; samples.</span>
                 </div>}
         <div className="row">
-            {console.log(dfThres)}
+            {/* {console.log(dfThres)} */}
             {dfThres && <div className="colx table">
-                        <div>Filtered table size: {dfThres.shape[0]}x{dfThres.shape[1]}. &nbsp;&nbsp;&nbsp; {fd.samples.length} samples{no_cate_ct() ===0?'.':no_cate_str()}  &nbsp;&nbsp;&nbsp; {dfThres['mutation type'].unique().shape[0]} mutation types.</div>
+                        <div>Filtered table size: {dfThres.shape[0]}x{dfThres.shape[1]}. &nbsp;&nbsp;&nbsp; {fd.samples.length} samples{no_cate_ct() ===0?',':no_cate_str()}  &nbsp;&nbsp; {cfThres.shape[0]} genes, &nbsp;&nbsp; {dfThres['mutation type'].unique().shape[0]} mutation types.</div>
                         <div id='content'/>
                     </div>}
 
