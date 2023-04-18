@@ -99,7 +99,22 @@ export default function FilterView(props){
 
         if(!d3.select('#content3').empty()){
             div3 = d3.select('#content3').append('div').attr('id','cmeta_tb')
-            cmeta.tbo.plot('cmeta_tb').table()
+            const tb = cmeta.tbo.copy()
+            const ascend = {}
+            tb.columns.forEach(x=>ascend[x]=true)
+            function drawTable(){
+                tb.plot('cmeta_tb').table()
+                d3.select('#cmeta_tb').selectAll('#header').on('click',function(){
+                    const col = d3.select(this).text()
+                    tb.sortValues(col,{ascending:ascend[col],inplace:true})
+                    ascend[col] = !ascend[col]
+                    console.log(col,tb)
+                    drawTable()
+                })
+            }
+            drawTable()
+            // cmeta.tbo.plot('cmeta_tb').table()
+            console.log('abc')
         }
         
         return ()=>{
