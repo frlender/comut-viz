@@ -3,6 +3,7 @@ import {  useNavigate } from "react-router-dom";
 import * as pd from "danfojs";
 import {Meta} from './Misc';
 import _ from 'lodash'
+import InputHelp from './InputHelp';
 
 export default function InputView(props){
     const [loading, setLoading] = useState(null)
@@ -263,7 +264,10 @@ export default function InputView(props){
     
     {tb && 
         <div>
-            <div className='row mt-4'>
+            <div className='row mt-4 help-row'>
+            Three pieces of information are required to make a comutation plot: sample ID, gene symbol and mutation type. Please select the corresponding columns using the dropdown menus below (standard column names are auto-selected) :
+            </div>
+            <div className='row mt-3'>
                 <div className='col-'>Select Columns:</div>
                 <div className='col- pl-2'>
                     Sample ID  <select value={sampleCol}
@@ -313,13 +317,16 @@ export default function InputView(props){
     }
     {metaTb && <div>
         <div className='row mt-4'>
-            <div className='col-'>Select Columns:</div>
+            <div className='col-'>Select the Sample ID column in the metadata:</div>
             <div className='col- pl-2'>
-                Sample ID  <select 
+                <select 
                 onChange={(e)=>{setMetaSampleCol(e.target.value)}}>
                     {metaTb.columns.map(x=>
                     <option key={'sample'+x}>{x}</option>)}
                 </select>
+            </div>
+            <div className='col- pl-5'>
+                    Table size: {metaTb.shape[0]}x{metaTb.shape[1]} 
             </div>
         </div>
         <div className='row mt-3'>
@@ -338,5 +345,6 @@ export default function InputView(props){
     </div>
     }
     {/* <div id='content'/> */}
+    {!exampleLoaded && <InputHelp></InputHelp>}
 </div>
 }

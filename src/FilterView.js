@@ -5,6 +5,9 @@ import {ComutData} from './ComutData';
 import * as d3 from 'd3';
 import {FilterData} from './Misc';
 import _ from 'lodash'
+import { Tooltip } from 'react-tooltip'
+import 'react-tooltip/dist/react-tooltip.css'
+import { BiHelpCircle } from "react-icons/bi";
 
 
 export default function FilterView(props){
@@ -236,12 +239,20 @@ export default function FilterView(props){
                     </span>
                     <input type='number' value={thres} min='1' 
                     max={fd.sortedPairs[0][1]} onChange={e=>changeThres(parseInt(e.target.value),fd)} />
-                    <span className="span-input"> &nbsp; samples.</span>
+                    <span className="span-input"> &nbsp; samples. </span>
+                    {/* Changing this number will change the number of genes visualized in the final plot. */}
+                    <a data-tooltip-id="filter-tooltip"  data-tooltip-html="This is a filter to adjust the number of genes visualized in the plot. The larger the threshold the less the number of genes are kept. <br />It retains the genes that are most frequently mutated across samples." className='xtooltip'>
+                    <BiHelpCircle/>
+                    </a>
+                    <Tooltip id="filter-tooltip"  />
                 </div>}
         <div className="row">
             {/* {console.log(dfThres)} */}
             {dfThres && <div className="colx table">
-                        <div>Filtered table size: {dfThres.shape[0]}x{dfThres.shape[1]}. &nbsp;&nbsp;&nbsp; {fd.samples.length} samples{no_cate_ct() ===0?',':no_cate_str()}  &nbsp;&nbsp; {cfThres.shape[0]} genes, &nbsp;&nbsp; {dfThres['mutation type'].unique().shape[0]} mutation types.</div>
+                        <div>Filtered table size: {dfThres.shape[0]}x{dfThres.shape[1]}. &nbsp;&nbsp;&nbsp; {fd.samples.length} samples{no_cate_ct() ===0?',':no_cate_str()}  &nbsp;&nbsp; {cfThres.shape[0]} genes, &nbsp;&nbsp; {dfThres['mutation type'].unique().shape[0]} mutation types.<a data-tooltip-id="filter-tooltip" data-tooltip-content="The number of unique samples, genes and mutation types in the table below." className='xtooltip'>
+                    <BiHelpCircle/>
+                    </a>
+                    <Tooltip id="filter-tooltip" /></div>
                         <div id='content'/>
                     </div>}
 
@@ -275,7 +286,7 @@ export default function FilterView(props){
 
 
             {dfThres && <div className="colx table">
-                        <div>There are {cfThres.shape[0]} genes mutated in at least {thres} samples. </div>
+                        <div>Top mutated genes ({cfThres.shape[0]} in total) and the number of samples they are mutated in. </div>
                         <div id='content2'/>
                     </div>}
             

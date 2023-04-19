@@ -136,6 +136,18 @@ a:hover{
   margin-top:-8px
 }
 
+a.xtooltip{
+  cursor: pointer;
+  font-size: 1.2em;
+  /* vertical-align: -10%; */
+  margin-top: -2px;
+  margin-left: 3px;
+}
+
+.xtooltip-tip{
+  max-width: 930px;
+}
+
 a.help:hover{
   color:darkblue;
   cursor:pointer;
@@ -168,4 +180,40 @@ a.help:hover{
 
 .err{
   color: red
+}
+
+
+.help-container{
+  border-top: 1px solid #b8bfc7;
+  border-bottom: 0px;
+  border-left: 0px;
+  border-right: 0px;
+  margin-top: 4.5em;
+  margin-left: -15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-left: 15px;
+  padding-right: 18%;
+  padding-top: 1em;
+  row-gap:1em;
+  margin-bottom: 2em;
+}
+
+.help-row{
+  text-align: left;
+  max-width: 930px;
+}
+
+.help-row2{
+  text-align: left;
+  max-width: 1000px;
+}
+
+.row-head{
+  font-weight: bold;
+}
+
+a{
+  text-decoration: underline;
 }
