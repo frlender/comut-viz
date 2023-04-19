@@ -232,7 +232,7 @@ export default function InputView(props){
         } */}
     </div>
     {exampleLoaded && 
-         <div className="row mt-3">{fname} {fmeta?`,   ${fmeta}`:''}</div>
+         <div className="row mt-3">Loaded file{fmeta? 's':''}: {fname} {fmeta?`,   ${fmeta}`:''}</div>
     }
     {!exampleLoaded &&
     <div className="row">
