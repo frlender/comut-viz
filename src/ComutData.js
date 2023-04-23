@@ -119,10 +119,14 @@ class ComutData{
             })
             mat.push(row)
         })
-        const mf = new pd.DataFrame(mat,{'index':this.cates,
+        let mf = new pd.DataFrame(mat,{'index':this.cates,
                     'columns':this.samples})
         // mf.head(10).print()
-        // TODO: sort by sample names from a to z after sort by sum.
+        // Done: sort by sample names from a to z after sort by sum.
+        // sort first by alphabetic order, then sort by sum
+        const idx = mf.index.slice(0)
+        idx.sort()
+        mf = mf.loc({rows:idx})
         this.rsum = mf.sum({axis:1}).sortValues({ascending:false})
         const index = this.rsum.index
         if(index.length === 1){

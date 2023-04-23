@@ -382,7 +382,7 @@ class YBar extends Gi{
                 }]
             })
 
-            const pct = parseInt(val/sample_total*100)
+            const pct = Math.round(val/sample_total*100)
             pcts.push({val:`${pct}%`,key:key})
         })
 
