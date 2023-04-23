@@ -241,7 +241,7 @@ export default function FilterView(props){
                     max={fd.sortedPairs[0][1]} onChange={e=>changeThres(parseInt(e.target.value),fd)} />
                     <span className="span-input"> &nbsp; samples. </span>
                     {/* Changing this number will change the number of genes visualized in the final plot. */}
-                    <a data-tooltip-id="filter-tooltip"  data-tooltip-html="This is a filter to adjust the number of genes visualized in the plot. The larger the threshold the less the number of genes are kept. <br />It retains the genes that are most frequently mutated across samples." className='xtooltip'>
+                    <a data-tooltip-id="filter-tooltip"  data-tooltip-html="Use this filter to adjust the number of genes visualized in the comutation plot. The larger the threshold the less the number of genes are shown. <br />It retains the genes that are most frequently mutated across samples." className='xtooltip'>
                     <BiHelpCircle/>
                     </a>
                     <Tooltip id="filter-tooltip"  />
@@ -257,7 +257,13 @@ export default function FilterView(props){
                     </div>}
 
             {mutCountsThres && <div className="colx table mut-counts-div">
-                <table className=''>
+                <div> Mutation type selector:
+                    <a data-tooltip-id="mut-counts-tooltip"  data-tooltip-html="Use this selector to exclude mutation types that you don't want to show in the comutation plot. Unselect a mutation type may cause the counts of other mutation types <br/> as well as the number of genes passing the current threshold to change. Please check help documentation for detail." className='xtooltip'>
+                    <BiHelpCircle/>
+                    </a>
+                    <Tooltip id="mut-counts-tooltip"  />
+                </div>
+                <table className='mut-counts-table'>
                     <thead>
                         <tr>
                             <th>Mutation Type</th>
@@ -292,7 +298,7 @@ export default function FilterView(props){
             
             
             { cmeta && <div className="colx table">
-                            <div>Sample metadata size: {cmeta.tb.shape[0]}x{cmeta.tb.shape[1]}.</div>
+                            <div>Sample metadata size: {cmeta.tb.shape[0]}x{cmeta.tb.shape[1]}.  &nbsp;&nbsp; &nbsp;The table is sortable by clicking on the column names. </div>
                             <div id='content3' />
                 </div>}
         </div>

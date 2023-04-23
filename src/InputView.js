@@ -265,7 +265,7 @@ export default function InputView(props){
     {tb && 
         <div>
             <div className='row mt-4 help-row'>
-            Three pieces of information are required to make a comutation plot: sample ID, gene symbol and mutation type. Please select the corresponding columns using the dropdown menus below (standard column names are auto-selected) :
+            Three pieces of information are required to make a comutation plot: sample ID, gene symbol and mutation type. Please select the corresponding columns in the table using the dropdown menus below (standard column names are auto-selected) :
             </div>
             <div className='row mt-3'>
                 <div className='col-'>Select Columns:</div>

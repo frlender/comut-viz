@@ -5,6 +5,8 @@ import {colors, VMmat, YLabels, XLabels, Legend, Bar, YBar,
 // import * as pd from "danfojs";
 import ColorPicker from './ColorPicker';
 import {Counter} from './ComutData';
+import { Tooltip } from 'react-tooltip'
+import { BiHelpCircle } from "react-icons/bi";
 
 
 function get_cl_mp(values){
@@ -58,6 +60,8 @@ export default function Viz(props){
     const [cl_mp,setCl_mp] = useState(cl_mp_init(props))
 
     const [wh, setWh] = useState([800,700])
+
+    console.log('abc')
 
     const changeCl = function(color){
         if('label' in cl_info){
@@ -292,8 +296,13 @@ export default function Viz(props){
                 max={props.vata.rows.max} 
                 onChange={changeMin}/> 
             <span className="span-input"> &nbsp; samples.
-                <span className='ml-3'>{vata.rows.cates.length} genes. </span> 
-                <span className='ml-3'>{vata.cols.samples.length} samples. </span>
+            <a data-tooltip-id="filter-tooltip"  data-tooltip-html="Use this filter to adjust the number of genes visualized in the comutation plot. The larger the threshold the less the number of genes are shown. <br />It retains the genes that are most frequently mutated across samples." className='xtooltip'>
+                    <BiHelpCircle/>
+                    </a>
+            <Tooltip id="filter-tooltip"  />
+                <span className='ml-4'>{vata.rows.cates.length} genes, </span> 
+                <span className='ml-2'>{vata.cols.samples.length} samples, </span>
+                <span className='ml-2'>{vata.rects.values.length} mutation types. </span>
             </span>
               
         </div>
