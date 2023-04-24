@@ -258,7 +258,7 @@ export default function FilterView(props){
 
             {mutCountsThres && <div className="colx table mut-counts-div">
                 <div> Mutation type selector:
-                    <a data-tooltip-id="mut-counts-tooltip"  data-tooltip-html="Use this selector to exclude mutation types that you don't want to show in the comutation plot. Unselect a mutation type may cause the counts of other mutation types <br/> as well as the number of genes passing the current threshold to change. Please check help documentation for detail." className='xtooltip'>
+                    <a data-tooltip-id="mut-counts-tooltip"  data-tooltip-html="Use this selector to exclude mutation types that you don't want to show in the comutation plot. Unselect a mutation type may cause the counts of other mutation types <br/> as well as the number of genes passing the current threshold to change. Please check the help documentation for detail." className='xtooltip'>
                     <BiHelpCircle/>
                     </a>
                     <Tooltip id="mut-counts-tooltip"  />
