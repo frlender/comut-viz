@@ -1,0 +1,1 @@
+The files in this folder are generated for conducting a case study that compares Comut-viz to four similar apps: ComutPlotter, JsComut, Oncoprinter and Oviz-bio.
