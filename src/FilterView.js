@@ -38,6 +38,27 @@ export default function FilterView(props){
         return fd.samples.length - dfThresSampleCt
     }
 
+    const getSamplesWithNoMutations = ()=>{
+        if(no_cate_ct() > 0){
+            const diff = _.difference(fd.samples, dfThres.sample.unique().values)
+            let res = 'The samples with no mutated genes are: <br/>'
+            let arr = []
+            console.log(diff)
+            diff.forEach((x,i)=>{
+                arr.push(x)
+                if((i+1)%3 === 0){
+                    res += arr.join(', ')+'<br/>'
+                    arr = []
+                }
+            })
+            res += arr.join(', ')+'<br/>'
+            console.log(res)
+            return res
+        }else{
+            return ''
+        } 
+    }
+
     const no_cate_str = () =>{
         const ct = no_cate_ct()
         const have = ct === 1?'has': 'have'
@@ -249,7 +270,7 @@ export default function FilterView(props){
         <div className="row">
             {/* {console.log(dfThres)} */}
             {dfThres && <div className="colx table">
-                        <div>Filtered table size: {dfThres.shape[0]}x{dfThres.shape[1]}. &nbsp;&nbsp;&nbsp; {fd.samples.length} samples{no_cate_ct() ===0?',':no_cate_str()}  &nbsp;&nbsp; {cfThres.shape[0]} genes, &nbsp;&nbsp; {dfThres['mutation type'].unique().shape[0]} mutation types.<a data-tooltip-id="filter-tooltip" data-tooltip-content="The number of unique samples, genes and mutation types in the table below." className='xtooltip'>
+                        <div>Filtered table size: {dfThres.shape[0]}x{dfThres.shape[1]}. &nbsp;&nbsp;&nbsp; {fd.samples.length} samples{no_cate_ct() ===0?',':no_cate_str()}  &nbsp;&nbsp; {cfThres.shape[0]} genes, &nbsp;&nbsp; {dfThres['mutation type'].unique().shape[0]} mutation types.<a data-tooltip-id="filter-tooltip"  data-tooltip-html={"The number of unique samples, genes and mutation types in the table below."+getSamplesWithNoMutations()} className='xtooltip'>
                     <BiHelpCircle/>
                     </a>
                     <Tooltip id="filter-tooltip" /></div>
