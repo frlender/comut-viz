@@ -74,8 +74,9 @@ class Counter{
 
 
 class ComutData{
-    constructor(df,samples=null){
+    constructor(df,fdo,samples=null){
         this.tb = df
+        this.fdo = fdo
         if(samples){
             // preserve orignal number of samples.
             this.samples = samples
@@ -246,7 +247,8 @@ class ComutData{
 
             cols:{ // samples
                 samples: this.mat.columns,
-                val_count: sample_val_ct.arr(this.mat.columns,values)
+                val_count: sample_val_ct.arr(this.mat.columns,values),
+                tmb_count: this.fdo.sampleValCt.arr(this.mat.columns,values)
             }
         }
 

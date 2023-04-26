@@ -182,8 +182,9 @@ export default function Viz(props){
                 height-xbar_height-xlabel_height-margin-indi_height)
                 .draw(vata.rects,cl_mp.vm)
         
+        // use vata.cols.val_count to plot bars with only top mutated genes.
         const xbar = new Bar(svg,vm.gx,margin,vm.width,xbar_height)
-                    .draw('xbar',vata.cols.val_count,cl_mp.vm)
+                    .draw('xbar',vata.cols.tmb_count,cl_mp.vm)
         
         // const ybar = new Bar(svg,vm.gx+vm.width,vm.gy,
         //             ybar_width,vm.height)

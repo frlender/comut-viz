@@ -1,5 +1,6 @@
 import * as pd from "danfojs";
 import _ from 'lodash'
+import {Counter} from './ComutData'
 
 class Meta{
     constructor(tb,tbo){
@@ -53,17 +54,55 @@ function get_fs(len,width,height){
 
 
 class FilterData{
-    constructor(df){
+    constructor(df,raw=false){
+        // raw: true if df is the raw input data without any filtering
         this.df = df
-        this.ct = _.mapValues(_.groupBy(df.values,x=>x[1]),
-            vals=>_.uniqBy(vals,x=>x[0]).length)
-        const pairs = _.toPairs(this.ct)
+        const ct = {}
+        const sample_mp = {}
+        let sampleValCt;
+        if(raw)
+            sampleValCt = new Counter('SampleVal')
+        // const self = this
+        df.values.forEach(vec=>{
+            const [sample,cate,val] = vec
+            if(!(cate in ct))
+                ct[cate] = {}
+            if(!(sample in ct[cate]))
+                ct[cate][sample] = true
+
+            if(!(sample in sample_mp))
+                sample_mp[sample]=true
+            
+            if(raw)
+                sampleValCt.add(sample,val,1)
+            
+        })
+        const pairs = []
+        _.keys(ct).forEach(k=>{
+            const count = _.keys(ct[k]).length
+            ct[k] = count
+            pairs.push([k,count])
+        })
+        this.ct = ct
+        this.samples = _.keys(sample_mp)
+        this.sampleValCt = sampleValCt
+
         this.sortedPairs = _.sortBy(pairs,x=>-x[1])
         this.cateTable = new pd.DataFrame(this.sortedPairs,
             {'columns':['category','count']})
-        this.samples = df.sample.unique().values
-        // this.cates = _.keys(this.ct)
     }
+
+    // constructor(df){
+    //     this.df = df
+    //     this.ct = _.mapValues(_.groupBy(df.values,x=>x[1]),
+    //         vals=>_.uniqBy(vals,x=>x[0]).length)
+    //     const pairs = _.toPairs(this.ct)
+    //     this.sortedPairs = _.sortBy(pairs,x=>-x[1])
+    //     this.cateTable = new pd.DataFrame(this.sortedPairs,
+    //         {'columns':['category','count']})
+    //     this.samples = df.sample.unique().values
+    //     // this.cates = _.keys(this.ct)
+    // }
     changeLimit(limit){
         // const df = this.df
         // const ct = this.ct

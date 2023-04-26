@@ -20,7 +20,7 @@ export default function FilterView(props){
     const [dfThresSampleCt, setDfThresSampleCt] = useState()
     let [mutCountsThres, setMutCountsThres] = useState(null)
     let [mutSelect, setMutSelect] = useState({})
-    let dfo = useRef() // original df
+    let fdo = useRef() // original fd
 
 
     let [rmeta, setRmeta] = useState(null) //row meta
@@ -90,8 +90,8 @@ export default function FilterView(props){
 
     const changeMutSelect = key=>{
         mutSelect[key] = !mutSelect[key]
-        const idx = dfo.current['value'].map(v=>v in mutSelect?mutSelect[v]:true)
-        const df = dfo.current.loc({rows:idx})
+        const idx = fdo.current.df['value'].map(v=>v in mutSelect?mutSelect[v]:true)
+        const df = fdo.current.df.loc({rows:idx})
         fd = new FilterData(df)
         changeThres(thres,fd)
         setFd(fd)
@@ -161,9 +161,10 @@ export default function FilterView(props){
         if(Object.keys(mp).length > 0)
             df.rename(mp,{inplace:true})
 
-        dfo.current = df
+        // fdo.current = df
         // console.log(df.columns)
-        const fd = new FilterData(df)
+        const fd = new FilterData(df,true)
+        fdo.current = fd
         const fdThres = fd.changeLimit(limit)
         const [dfThres,cfThres,mutCountsThres] = fd.changeThres(fdThres)
         dfThres.rename(colMp,{inplace:true})
@@ -226,7 +227,7 @@ export default function FilterView(props){
                                 console.log('dfThres has rows with nil values. Removed.')
                                 dfThres = dfThres.iloc({rows:numIdx})
                             }
-                            const cm = new ComutData(dfThres,fd.samples)
+                            const cm = new ComutData(dfThres,fdo.current,fd.samples)
                             let vata;
                             if(cmeta){
                                 vata = cm.create_vata(waterfall,cmeta.tb.index)
