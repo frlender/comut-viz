@@ -169,11 +169,11 @@ export default function InputView(props){
                             const diffLeft = _.difference(mafSamples,metaSamples)
                             const cmmCount = mafSamples.length - diffLeft.length
                             if(cmmCount === 0){
-                                setErrMsg('  ERROR: sample IDs in the MAF file do not match those in the metadata file with 0 sample IDs in common. Please check.')
+                                setErrMsg('  ERROR: sample IDs in the mutation data file do not match those in the metadata file with no sample IDs in common. Please check.')
                                 return
                             }
                             if(cmmCount > 0 && cmmCount < mafSamples.length){
-                                alert(`${mafSamples.length - cmmCount} out of ${mafSamples.length} samples do not have metadata in the metadata file: \n ${diffLeft.join(',')}. \n\n Please confirm.`)
+                                alert(`${mafSamples.length - cmmCount} out of ${mafSamples.length} samples do not have metadata in the metadata file: \n ${diffLeft.join(', ')}. \n\n Only the ${cmmCount} samples with metadata will be shown. \n Please confirm.`)
 
                                 const cmmMap = {}
                                 mafSamples.forEach(x=>{
