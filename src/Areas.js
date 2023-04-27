@@ -270,7 +270,7 @@ class Bar extends Gi{
                 const sr = d3.scaleLinear()
                         .domain(s.domain())
                         .range(s.range().reverse())
-                this.g.call(d3.axisLeft(sr).ticks(4))
+                this.g.call(d3.axisLeft(sr).ticks(3))
                         .call(g => g.select('.domain').remove())
                 // console.log(this.g,'abc','c')
                 const offset = 0.3
