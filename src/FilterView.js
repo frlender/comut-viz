@@ -163,8 +163,22 @@ export default function FilterView(props){
 
         // fdo.current = df
         // console.log(df.columns)
-        const fd = new FilterData(df,true)
-        fdo.current = fd
+        fdo.current = new FilterData(df,true)
+        let fd;
+
+        //uncheck silent mutations by default as in maftools.
+        let silentKey = undefined
+        _.keys(mutSelect).forEach(x=>{
+            if(x.toLowerCase().includes('silent'))
+            silentKey = x
+        })        
+        if(silentKey){
+            const idx = fdo.current.df['value'].map(v=>!(v===silentKey))
+            const df = fdo.current.df.loc({rows:idx})
+            fd = new FilterData(df)
+        }else
+            fd = fdo.current
+
         const fdThres = fd.changeLimit(limit)
         const [dfThres,cfThres,mutCountsThres] = fd.changeThres(fdThres)
         dfThres.rename(colMp,{inplace:true})
@@ -180,10 +194,11 @@ export default function FilterView(props){
         df['value'].unique().values.forEach((key)=>{
             mutSelect[key]=true
         })
+        if(silentKey)
+            mutSelect[silentKey] = false
         setMutSelect(mutSelect)
 
-        // console.log(mutCountsThres)
-
+        
 
         if(props.cmeta){
             setCmeta(props.cmeta)
