@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {colors, VMmat, YLabels, XLabels, Legend, Bar, YBar, 
     GradLegend, Indicator} from './Areas'
 // import * as pd from "danfojs";
@@ -7,7 +7,23 @@ import ColorPicker from './ColorPicker';
 import {Counter} from './ComutData';
 import { Tooltip } from 'react-tooltip'
 import { BiHelpCircle } from "react-icons/bi";
+import _ from 'lodash'
 
+
+const colorSchemes = {
+    'maftools':{
+        'Missense_Mutation': 'rgb(51,160,44)',
+        'Splice_Site': 'rgb(255,127,0)',
+        'Frame_Shift_Del': 'rgb(31,120,180)',
+        'Nonsense_Mutation':'rgb(227,26,28)',
+        'In_Frame_Del':'rgb(255,255,153)',
+        'Frame_Shift_Ins':'rgb(106,61,154)',
+        'Nonstop_Mutation':'rgb(166,206,227)',
+        'In_Frame_Ins':'rgb(213,62,79)',
+        'Translation_Start_Site':'rgb(244,109,67)',
+        'multiple':'rgb(0,0,0)'
+    }
+}
 
 function get_cl_mp(values){
     const cl = d3.scaleOrdinal(colors)
@@ -61,7 +77,45 @@ export default function Viz(props){
 
     const [wh, setWh] = useState([800,700])
 
+    const defaultColors = useRef()
+
+    const schemesInit = ['default','maftools']
+
     console.log('abc')
+
+    const checkColorSchemeOverlap = function(schemeName){
+        if(schemeName === 'default') return true
+        const schemeMuts = _.keys(colorSchemes[schemeName])
+        const overlap = _.intersection(schemeMuts,vata.rects.values)
+        console.log(overlap)
+        if(overlap.length > vata.rects.values.length-2){
+            return true
+        }else{
+            return false
+        }
+    }
+
+    const schemes = schemesInit.filter(x=>checkColorSchemeOverlap(x))
+
+    const changeColorScheme = e=>{
+        const schemeName = e.target.value
+        if(_.isNil(defaultColors.current)){
+            defaultColors.current = cl_mp['vm']
+        }
+        if(schemeName==='default') cl_mp['vm'] = defaultColors.current
+        else{
+            cl_mp['vm'] = colorSchemes[schemeName]
+            const diff = _.difference(vata.rects.values,_.keys(cl_mp['vm']))
+            const cl = d3.scaleOrdinal(_.reverse(colors.slice(0)))
+            .domain(diff)
+        
+            diff.forEach(d =>{
+                cl_mp['vm'][d] = cl(d)
+                })
+        }
+        setCl_mp({...cl_mp})
+        setCl_info(null)
+    }
 
     const changeCl = function(color){
         if('label' in cl_info){
@@ -287,6 +341,11 @@ export default function Viz(props){
             <button className='btn btn-primary btn-i' onClick={download}>Download</button>
             &nbsp; <span className="span-input">width:</span>  &nbsp;<input type='number' value={wh[0]} min='200' step='100' onChange={changeWidth}/>
             &nbsp; <span className="span-input">height:</span>  &nbsp;<input type='number' value={wh[1]} min='200' step='100' onChange={changeheight}/>
+            {schemes.length > 1 && <span className='color-scheme'>Color schemes: &nbsp; 
+            <select onChange={e=>changeColorScheme(e)}>
+                {schemes.map(x=>
+                    <option key={x}>{x}</option>)}   
+            </select></span>}
         </div>
         <div className="row mb-2">
             <span className="span-input">

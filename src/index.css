@@ -92,6 +92,11 @@ code {
   padding-top: 2px
 }
 
+.color-scheme{
+  padding-top: 2.5px;
+  margin-left: 3em;
+}
+
 .container-pad{
   padding-left: 38px;
   /* overflow-anchor: none; */
@@ -222,3 +227,4 @@ a.help:hover{
 a{
   text-decoration: underline;
 }
+
