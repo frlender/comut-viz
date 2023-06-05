@@ -7,7 +7,7 @@ export default function InputHelp(){
         <div className="help-row"><span className="row-head">Sample Metadata File:</span> This file is optional. It should be a tab/comma delimited text file with a .txt, .csv or .tsv extension. It must have a header and a sample ID column containing the same sample IDs as in the mutation data file. The sample ID column names do not need to be the same. (<a href='https://github.com/frlender/comut-viz/blob/main/public/gallbladder.maf'>example 1</a>)</div>
         <div className="help-row">The app will automatically ignore <span className="row-head">comment lines</span> starting with "#" in the input files. If there are comment lines in other formats, please delete them before submitting to the app.</div>
         <div className="help-row"> <span className="row-head">Example Buttons: </span>Users can test the app using the two example buttons. One loads a mutationa data file with 5k rows and its metadata, and the other loads a large mutation data file with 141k rows.</div>
-        <div className="help-row"></div>
+        <div className="help-row cit">If you find Comut-viz useful, please cite the following reference:<div><a href='https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-023-05351-8' target='_blank'>Qiaonan Duan, Weiyi Wang, Feiling Feng, Xiaoqing Jiang, Hao Chen, Dadong Zhang, Tongyi Zhang. <br/> Comut-viz: efficiently creating and browsing comutation plots online. <i>BMC Bioinformatics 24, 226 (2023)</i>.</a></div></div>
 
     </div>
 }
