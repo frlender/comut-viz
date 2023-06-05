@@ -11,17 +11,18 @@ import _ from 'lodash'
 
 
 const colorSchemes = {
+    // only use hex color values as that is the only accepted format for the input element.
     'maftools':{
-        'Missense_Mutation': 'rgb(51,160,44)',
-        'Splice_Site': 'rgb(255,127,0)',
-        'Frame_Shift_Del': 'rgb(31,120,180)',
-        'Nonsense_Mutation':'rgb(227,26,28)',
-        'In_Frame_Del':'rgb(255,255,153)',
-        'Frame_Shift_Ins':'rgb(106,61,154)',
-        'Nonstop_Mutation':'rgb(166,206,227)',
-        'In_Frame_Ins':'rgb(213,62,79)',
-        'Translation_Start_Site':'rgb(244,109,67)',
-        'multiple':'rgb(0,0,0)'
+        'Missense_Mutation': '#33a02c',
+        'Splice_Site': '#ff7f00',
+        'Frame_Shift_Del': '#1f78b4',
+        'Nonsense_Mutation': '#e31a1c',
+        'In_Frame_Del': '#ffff99',
+        'Frame_Shift_Ins': '#6a3d9a',
+        'Nonstop_Mutation': '#a6cee3',
+        'In_Frame_Ins': '#d53e4f',
+        'Translation_Start_Site': '#f46d43',
+        'multiple': '#000000'
     }
 }
 

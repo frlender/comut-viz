@@ -4,9 +4,7 @@ import {colors} from './Areas'
 import './index.css'
 
 export default function ColorPicker(props){
-    
     const [sampleCl,setSampleCl] = useState(props.cl_info.color)
-    
 
     useEffect(()=>{
         // watch for props.cl_info.color change
