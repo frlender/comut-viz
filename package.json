@@ -1,6 +1,6 @@
 {
   "name": "comut-viz",
-  "version": "0.3.0",
+  "version": "0.3.2",
   "homepage": "https://frlender.github.io/comut-viz-app/",
   "private": true,
   "dependencies": {

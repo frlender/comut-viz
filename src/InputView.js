@@ -112,7 +112,7 @@ export default function InputView(props){
                 // df.setIndex({column:df.columns[0],inplace:true,drop:true})
                 setMetaTb(dfo)
                 setMetaSampleCol(dfo.columns[0])
-                console.log(fmeta,df)
+                // console.log(fmeta,df)
                 // setLoading(false)
             })
       }
@@ -155,7 +155,7 @@ export default function InputView(props){
                 <button className='btn btn-success btn-i' onClick={()=>{
                     setLoading('loading ...')
                     setTimeout(()=>{
-                        console.log('abc')
+                        // console.log('abc')
                         if(metaTb){
                             // check id match
                             const metaSamples = metaTb[metaSampleCol].unique().values

@@ -43,7 +43,7 @@ export default function FilterView(props){
             const diff = _.difference(fd.samples, dfThres.sample.unique().values)
             let res = 'The samples with no mutated genes are: <br/>'
             let arr = []
-            console.log(diff)
+            // console.log(diff)
             diff.forEach((x,i)=>{
                 arr.push(x)
                 if((i+1)%3 === 0){
@@ -52,7 +52,7 @@ export default function FilterView(props){
                 }
             })
             res += arr.join(', ')+'<br/>'
-            console.log(res)
+            // console.log(res)
             return res
         }else{
             return ''
@@ -132,13 +132,13 @@ export default function FilterView(props){
                     const col = d3.select(this).text()
                     tb.sortValues(col,{ascending:ascend[col],inplace:true})
                     ascend[col] = !ascend[col]
-                    console.log(col,tb)
+                    // console.log(col,tb)
                     drawTable()
                 })
             }
             drawTable()
             // cmeta.tbo.plot('cmeta_tb').table()
-            console.log('abc')
+            // console.log('abc')
         }
         
         return ()=>{
@@ -166,12 +166,16 @@ export default function FilterView(props){
         fdo.current = new FilterData(df,true)
         let fd;
 
+        const uniqVals = df['value'].unique().values
+
         //uncheck silent mutations by default as in maftools.
-        let silentKey = undefined
-        _.keys(mutSelect).forEach(x=>{
+        let silentKey = null
+        uniqVals.forEach(x=>{
+            // console.log(x,'=== in silent key check')
             if(x.toLowerCase().includes('silent'))
             silentKey = x
-        })        
+        }) 
+        // console.log(silentKey)       
         if(silentKey){
             const idx = fdo.current.df['value'].map(v=>!(v===silentKey))
             const df = fdo.current.df.loc({rows:idx})
@@ -191,7 +195,7 @@ export default function FilterView(props){
         setCfThres(cfThres)
         setMutCountsThres(mutCountsThres)
 
-        df['value'].unique().values.forEach((key)=>{
+        uniqVals.forEach((key)=>{
             mutSelect[key]=true
         })
         if(silentKey)

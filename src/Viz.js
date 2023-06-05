@@ -81,13 +81,13 @@ export default function Viz(props){
 
     const schemesInit = ['default','maftools']
 
-    console.log('abc')
+    // console.log('abc')
 
     const checkColorSchemeOverlap = function(schemeName){
         if(schemeName === 'default') return true
         const schemeMuts = _.keys(colorSchemes[schemeName])
         const overlap = _.intersection(schemeMuts,vata.rects.values)
-        console.log(overlap)
+        // console.log(overlap)
         if(overlap.length > vata.rects.values.length-2){
             return true
         }else{
