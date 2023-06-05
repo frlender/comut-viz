@@ -13,7 +13,6 @@ Current tools for creating comutation plots are either offline packages that req
 ![image](https://github.com/frlender/comut-viz/blob/main/legacy/Figure_3.png)
 
 ## Citation
-If you find Comut-viz useful, please cite the following reference:
 
 [Qiaonan Duan, Weiyi Wang, Feiling Feng, Xiaoqing Jiang, Hao Chen, Dadong Zhang, Tongyi Zhang.
 Comut-viz: efficiently creating and browsing comutation plots online. *BMC Bioinformatics 24, 226 (2023)*.](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-023-05351-8)
