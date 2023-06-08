@@ -231,3 +231,45 @@ a{
 .cit{
   margin-top:15px;
 }
+
+.version{
+  margin-left: 0.7em;
+  font-size:0.7em;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* .version a{
+  text-decoration: underline;
+} */
+
+.news-container{
+  margin-left:2.5em;
+  margin-top:2em;
+  max-width: 930px;
+}
+
+.news-title{
+  font-size: larger;
+  border-bottom: #434649;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  width: 150px
+}
+
+.news-time{
+  font-size: 0.8em;
+  margin-left: 1em;
+}
+
+.news-content{
+  margin-top: .3em;
+}
+
+.news-paragraph{
+  margin-left: .7em;
+}
+
+.big-header{
+  cursor: pointer;
+}
