@@ -264,6 +264,7 @@ a{
 
 .news-content{
   margin-top: .3em;
+  margin-bottom: 1.5em;
 }
 
 .news-paragraph{
@@ -272,4 +273,19 @@ a{
 
 .big-header{
   cursor: pointer;
+}
+
+.input-adjust{
+  width: 120px;
+  height: 27px;
+  margin-top: 1px;
+}
+
+.input-filter{
+  height: 27px;
+  margin-top: 1px;
+}
+
+.span-input-2{
+  margin-top: -2px;
 }

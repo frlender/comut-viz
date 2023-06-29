@@ -78,6 +78,9 @@ export default function Viz(props){
 
     const [wh, setWh] = useState([800,700])
 
+    const geneLabelWidthInit = 60
+    const [geneLabelWidth, setGeneLabelWidth] = useState(geneLabelWidthInit)
+
     const defaultColors = useRef()
 
     const schemesInit = ['default','maftools']
@@ -134,6 +137,10 @@ export default function Viz(props){
 
     function changeheight(e){
         setWh([wh[0],e.target.value])
+    }
+
+    function changeGeneLabelWidth(e){
+        setGeneLabelWidth(e.target.value)
     }
 
     const changeMin = function(e){
@@ -213,6 +220,8 @@ export default function Viz(props){
     useEffect(()=>{
         // console.log('in effect',vata)
         const [width, height] = wh
+        console.log(width, height, geneLabelWidth)
+        const ylabel_width =  parseFloat(geneLabelWidth)
         const margin = 30 
         const svg = d3.select('#viz').append('svg')
             .attr('width',width)
@@ -227,7 +236,7 @@ export default function Viz(props){
         const ybar_width = margin*2.4
         const indi_height_each = margin/2*1.2
         const xlabel_height = margin*2
-        const ylabel_width =  margin*2
+        
 
         
         const indi_height = vata.cmeta.arr.length*indi_height_each
@@ -340,8 +349,9 @@ export default function Viz(props){
     return <div className='container-fluid container-pad'>
         <div className="row input-status mb-2 mt-2">
             <button className='btn btn-primary btn-i' onClick={download}>Download</button>
-            &nbsp; <span className="span-input">width:</span>  &nbsp;<input type='number' value={wh[0]} min='200' step='100' onChange={changeWidth}/>
-            &nbsp; <span className="span-input">height:</span>  &nbsp;<input type='number' value={wh[1]} min='200' step='100' onChange={changeheight}/>
+            &nbsp; <span className="span-input">Width:</span>  &nbsp;<input className='input-adjust' type='number' value={wh[0]} min='200' step='100' onChange={changeWidth}/>
+            &nbsp; <span className="span-input">Height:</span>  &nbsp;<input className='input-adjust'type='number' value={wh[1]} min='200' step='100' onChange={changeheight}/>
+            &nbsp; <span className="span-input">Gene label width:</span>  &nbsp;<input  className='input-adjust' type='number' value={geneLabelWidth} min='60' step='10' onChange={changeGeneLabelWidth}/>
             {schemes.length > 1 && <span className='color-scheme'>Color schemes: &nbsp; 
             <select onChange={e=>changeColorScheme(e)}>
                 {schemes.map(x=>
@@ -352,11 +362,11 @@ export default function Viz(props){
             <span className="span-input">
                 Keep genes mutated in at least &nbsp;  
             </span>
-            <input type='number' value={vata.rows.min} 
+            <input className='input-filter' type='number' value={vata.rows.min} 
                 min={props.vata.rows.min} 
                 max={props.vata.rows.max} 
                 onChange={changeMin}/> 
-            <span className="span-input"> &nbsp; samples.
+            <span className="span-input-2"> &nbsp; samples.
             <a data-tooltip-id="filter-tooltip"  data-tooltip-html="Use this filter to adjust the number of genes visualized in the comutation plot. The larger the threshold the less the number of genes are shown. <br />It retains the genes that are most frequently mutated across samples." className='xtooltip'>
                     <BiHelpCircle/>
                     </a>
