@@ -198,7 +198,7 @@ a.help:hover{
   border-bottom: 0px;
   border-left: 0px;
   border-right: 0px;
-  margin-top: 4.5em;
+  margin-top: 3em;
   margin-left: -15px;
   display: flex;
   flex-direction: column;
@@ -289,3 +289,8 @@ a{
 .span-input-2{
   margin-top: -2px;
 }
+
+.ignore-comment{
+  padding-left: 4px;
+}
+

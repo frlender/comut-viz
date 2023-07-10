@@ -12,6 +12,9 @@ export default function InputView(props){
     let [metaTb, setMetaTb] = useState(null)
     const [exampleLoaded,setExampleLoaded] = useState(false)
     const [showExampleBtn, setShowExampleBtn] = useState(true)
+    const [rmComment,setRmComment] = useState(true)
+
+    console.log(rmComment)
 
     const [errMsg,setErrMsg] = useState('')
 
@@ -38,8 +41,10 @@ export default function InputView(props){
         // cb must setLoading(false)
         setLoading('loading ...')
         const file = e.target.files[0]
-        pd.readCSV(file,{'header':true,'skipEmptyLines':'greedy',
-            'comments':'#'}).then(cb).catch(err=>{
+        const option = {'header':true,'skipEmptyLines':'greedy'}
+        if(rmComment)
+            option['comments'] = '#'
+        pd.readCSV(file,option).then(cb).catch(err=>{
                 // console.log('error inside',err)
                 if(fileAnnot==='maf'){
                     setErrMsg('MAF file parsing error: '+err)
@@ -253,11 +258,13 @@ export default function InputView(props){
              <button className='ml-2 mt-4 btn btn-success'
                 onClick={()=>loadExample('TCGA-LUSC.maf')}>example 141k</button>
         </div>}
-        {/* {showExampleBtn &&
-        <div className="col- pl-5">
-          
-        </div>} */}
     </div>
+    }
+    {!exampleLoaded && 
+        <div className='row mt-3 ignore-comment'>
+            <input checked={rmComment} onChange={e=>setRmComment(!rmComment)} type='checkbox'></input>
+            <span>&nbsp; Ignore comment lines starting with "#".</span>
+        </div>
     }
    
 
