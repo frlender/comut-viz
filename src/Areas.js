@@ -143,7 +143,12 @@ class VMmat extends Gi{
 }
 
 class YLabels extends Gi{
-    draw(labels,padding=5){
+    draw(labels,sample_count,padding=5){
+        const mp = {}
+        sample_count.index.forEach((x,i)=>{
+            mp[x] = sample_count.values[i]
+        })
+
         const y = d3.scaleBand()
                 .domain(labels)
                 .range([0,this.height])
@@ -153,13 +158,19 @@ class YLabels extends Gi{
         const fsw = this.width/5 //font-size width
         const fsh = y.bandwidth() // font-size height
         this.fs = fsh < fsw? fsh:fsw
-        this.g.selectAll('text').data(labels)
-            .join('text')
-            .attr('y',d => y(d)+y.bandwidth()/2*1.6)
+        const gs = this.g.selectAll('text').data(labels)
+            .join('g')
+            .attr('transform',d => 
+                `translate(0,${y(d)+y.bandwidth()/2*1.6})`)
+            // .attr('y',d => y(d)+y.bandwidth()/2*1.6)
+        gs.append('text')
             .text(d => d)
             .attr('text-anchor','end')
             .attr('x',this.width-padding)
             .attr('font-size',`${this.fs}px`)
+
+        gs.append('title')
+            .text(d=>`sample count ${mp[d]}`)
 
         return this
     }

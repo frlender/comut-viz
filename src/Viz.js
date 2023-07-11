@@ -85,7 +85,7 @@ export default function Viz(props){
 
     const schemesInit = ['default','maftools']
 
-    // console.log('abc')
+    console.log('abc')
 
     const checkColorSchemeOverlap = function(schemeName){
         if(schemeName === 'default') return true
@@ -220,7 +220,7 @@ export default function Viz(props){
     useEffect(()=>{
         // console.log('in effect',vata)
         const [width, height] = wh
-        console.log(width, height, geneLabelWidth)
+        // console.log(width, height, geneLabelWidth)
         const ylabel_width =  parseFloat(geneLabelWidth)
         const margin = 30 
         const svg = d3.select('#viz').append('svg')
@@ -261,7 +261,7 @@ export default function Viz(props){
         
         const ylabels = new YLabels(svg,0,vm.gy,
                 ylabel_width,vm.height)
-                .draw(vata.rows.cates)
+                .draw(vata.rows.cates,vata.rows.sample_count)
         
         // const xlabels = new XLabels(svg,ylabel_width,vm.gy+vm.height,
         //             vm.width,xlabel_height)

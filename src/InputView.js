@@ -14,7 +14,7 @@ export default function InputView(props){
     const [showExampleBtn, setShowExampleBtn] = useState(true)
     const [rmComment,setRmComment] = useState(true)
 
-    console.log(rmComment)
+    // console.log(rmComment)
 
     const [errMsg,setErrMsg] = useState('')
 
@@ -57,9 +57,9 @@ export default function InputView(props){
     const readData = function(e){
         // console.log(e)
         readFile(e,df => {
-            console.log(df)
+            // console.log(df)
             const df2 = df
-            console.log(df2)
+            // console.log(df2)
             setTb(df2)
             setLoading(false)
             setShowExampleBtn(false)

@@ -6,7 +6,8 @@ export default function News(){
       <span className='news-time'>2023/7/10</span>
     </div>
     <div className="news-content">
-      Added an  checkbox in the input view to control the default behavior of ignoring comment lines starting with "#".
+      1. Added an  checkbox in the input view to control the default behavior of ignoring comment lines starting with "#".
+      <div>2. Mouse over a gene label in the visualization view show its sample count.</div>
       {/* <div className='news-paragraph'>1. The top bar plot now displays the mutation counts of all genes in each sample rather than only the genes shown in the comutation plot.</div>
       <div className='news-paragraph'>2. The silent mutation type is unchecked by default.</div>
       <div className='news-paragraph'>3. A maftools color scheme is provided if the input is a standard MAF file.</div> */}
