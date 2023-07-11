@@ -260,7 +260,7 @@ export default function InputView(props){
         </div>}
     </div>
     }
-    {!exampleLoaded &&
+    {!exampleLoaded && !tb &&
         <div className='row mt-3 ignore-comment'>
             <input disabled={tb} checked={rmComment} onChange={e=>setRmComment(!rmComment)} type='checkbox'></input>
             <span>&nbsp; Ignore comment lines starting with "#".</span>
