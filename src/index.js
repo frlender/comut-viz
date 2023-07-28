@@ -37,6 +37,7 @@ function App(){
   const [tb,setTb] = useState(null)
   const [cmeta,setCmeta] = useState(null)
   let navigate = useNavigate();
+  const [session, setSession] = useState()
 
   useEffect(()=>{
      // add footer text
@@ -53,17 +54,18 @@ function App(){
                   navigate('/')
                 }}>Comut-viz</span> 
                 <span className='version' 
-                onClick={()=>{navigate('/news')}}>v0.3.8</span>         
+                onClick={()=>{navigate('/news')}}>v0.5.0</span>         
                 <a href='/comut-viz-app/help.pdf' target='_blank' className='help'><BiHelpCircle></BiHelpCircle></a>
               </div>
               <Outlet/>
             </div>}>
           <Route path='news' element={<News></News>}/>
           <Route path="/" element={<InputView 
+              setVata={setVata} setSession={setSession}
               setTb={setTb} setCmeta={setCmeta}/>} />
           <Route path='filter' element={<FilterViewHolder
             cmeta={cmeta} tb={tb} setVata={setVata}></FilterViewHolder>}/>
-          <Route path="viz" element={<VizHolder vata={vata} />} />
+          <Route path="viz" element={<VizHolder vata={vata} session={session}/>} />
         </Route>
       </Routes>
     </div>

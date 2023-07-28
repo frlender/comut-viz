@@ -2,6 +2,18 @@ export default function News(){
   return <div className='news-container'>
     <div className='news-block'>
     <div className='news-title'>
+      <span className="row-head">v0.5.0</span>
+      <span className='news-time'>2023/7/28</span>
+    </div>
+    <div className="news-content">
+      Add Session Saving functions:
+      <div className='news-paragraph'>1. In the visualization view, users can click on the save button to save the current session to the local storage in the browser.</div>
+      <div className='news-paragraph'>2. Users can edit the session name by clicking on it.</div>
+      <div className='news-paragraph'>3. After a session is saved, a link will appear in the input view. Click on the link to load the session.</div>
+    </div>
+  </div>
+    <div className='news-block'>
+    <div className='news-title'>
       <span className="row-head">v0.3.8</span>
       <span className='news-time'>2023/7/10</span>
     </div>

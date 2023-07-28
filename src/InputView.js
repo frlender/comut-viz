@@ -4,6 +4,7 @@ import * as pd from "danfojs";
 import {Meta} from './Misc';
 import _ from 'lodash'
 import InputHelp from './InputHelp';
+import {ListSessions} from 'react-save-session'
 
 export default function InputView(props){
     const [loading, setLoading] = useState(null)
@@ -136,6 +137,21 @@ export default function InputView(props){
         },'meta')
     }
 
+    const enterSession = (session)=>{
+        console.log(session)
+        const sample_count = new pd.Series(
+            session.data.vata.rows.sample_count.$data,
+            {index:session.data.vata.rows.sample_count.$index})
+        
+        session.data.vata.rows.sample_count = sample_count
+        props.setVata(session.data.vata)
+        session.data.sess.sessName = session.sessName
+        session.data.sess.uid = session.uid
+        props.setSession(session.data.sess)
+        navigate('/viz')
+
+    }
+
     useEffect(()=>{
         // console.log(tb)
         // if(tb){
@@ -265,6 +281,10 @@ export default function InputView(props){
             <input disabled={tb} checked={rmComment} onChange={e=>setRmComment(!rmComment)} type='checkbox'></input>
             <span>&nbsp; Ignore comment lines starting with "#".</span>
         </div>
+    }
+
+    {!exampleLoaded && !tb &&
+        <ListSessions dbName='comut-viz' enter={enterSession}></ListSessions>
     }
    
 

@@ -294,3 +294,42 @@ a{
   padding-left: 4px;
 }
 
+.btn-session{
+  padding: .15rem .6rem;
+  margin-left: 45px
+}
+
+
+.rss-list-sessions{
+  margin-top: .6em;
+  margin-left: -5px;
+}
+
+.rss-list-sessions > div:last-child{
+  margin-bottom: -1em;
+}
+
+.rss-list-sessions-item{
+  cursor: pointer;
+}
+
+.rss-list-sessions-item-time{
+  margin-left: 1em;
+}
+
+.rss-list-sessions-item-remove{
+  margin-left: 2em;
+}
+
+.rss-save-session-saved{
+  vertical-align: -9%;
+  background-color: #29282887;
+  font-size: 0.9em;
+  color: white;
+  padding-left: 7px;
+  padding-right: 6px;
+  padding-bottom: 4px;
+  padding-top: 2px;
+  border-radius: 0.15rem;
+  font-weight: 500;
+}

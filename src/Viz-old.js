@@ -69,50 +69,30 @@ function cl_mp_init(props){
 }
 
 export default function Viz(props){
-    // console.log(props)
     const [vata,setVata] = useState(props.vata)
     // const [cl,setCl] = useState(get_cl_mp(props.vata.rects.values))
     const [cl_info, setCl_info] = useState(null)
     // const [grad_cl, setGrad_cl] = useState(colors[0])
 
-    const [cl_mp,setCl_mp] = useState(
-        props.session ? props.session.cl_mp:cl_mp_init(props))
+    const [cl_mp,setCl_mp] = useState(cl_mp_init(props))
 
-    const [wh, setWh] = useState(
-        props.session ? props.session.wh:[800,700])
+    const [wh, setWh] = useState([800,700])
 
     const geneLabelWidthInit = 60
-    const [geneLabelWidth, setGeneLabelWidth] = useState(
-        props.session ? props.session.geneLabelWidth: geneLabelWidthInit)
+    const [geneLabelWidth, setGeneLabelWidth] = useState(geneLabelWidthInit)
 
-    if(props.session){
-        _.keys(props.session.colorSchemes).forEach(k=>{
-            colorSchemes[k] = props.session.colorSchemes[k]
-        })
-    }
-
-    const defaultColors = useRef(
-        props.session ? props.session.colorSchemes['default'] :
-            undefined
-    )
-
-    const colorSchemeName = useRef(
-        props.session? props.session.colorSchemeName:'default')
+    const defaultColors = useRef()
     const schemesInit = ['default','maftools']
 
     const getSessData = ()=>{
-        colorSchemes['default'] = defaultColors.current
         return {
             vata:vata,
             sess:{
-                colorSchemeName: colorSchemeName.current,
-                colorSchemes:colorSchemes,
-                cl_mp: cl_mp,
-                wh: wh,
-                geneLabelWidth: geneLabelWidth,
+                
             }
         }
     }
+    console.log('abc')
 
     const checkColorSchemeOverlap = function(schemeName){
         if(schemeName === 'default') return true
@@ -127,12 +107,9 @@ export default function Viz(props){
     }
 
     const schemes = schemesInit.filter(x=>checkColorSchemeOverlap(x))
-    // console.log(schemes,schemesInit)
 
     const changeColorScheme = e=>{
         const schemeName = e.target.value
-        console.log(e.target.value)
-        colorSchemeName.current = schemeName
         if(_.isNil(defaultColors.current)){
             defaultColors.current = cl_mp['vm']
         }
@@ -385,18 +362,15 @@ export default function Viz(props){
             &nbsp; <span className="span-input">Height:</span>  &nbsp;<input className='input-adjust'type='number' value={wh[1]} min='200' step='100' onChange={changeheight}/>
             &nbsp; <span className="span-input">Gene label width:</span>  &nbsp;<input  className='input-adjust' type='number' value={geneLabelWidth} min='60' step='10' onChange={changeGeneLabelWidth}/>
             {schemes.length > 1 && <span className='color-scheme'>Color schemes: &nbsp; 
-            <select onChange={e=>changeColorScheme(e)} defaultValue={colorSchemeName.current}>
+            <select onChange={e=>changeColorScheme(e)}>
                 {schemes.map(x=>
                     <option key={x}>{x}</option>)}   
             </select></span>}
-            <SaveSession dbName='comut-viz' 
-                buttonClass={'btn btn-primary btn-session'}
-                editTextStyle={{'width':'80px','height':'25px','verticalAlign':'-7%',}}
-                getData={getSessData}
-                notification
-                // notificationDelay={1000}
-                sessName={props.session ? props.session.sessName : undefined}
-                uid={props.session ? props.session.uid : undefined}></SaveSession>
+            <SaveSession dbName='comut-viz'
+                getData={getSessData}></SaveSession>
+            {/* <button onClick={saveSession()}>Save</button>
+            <EditText defaultValue={sessName} 
+                inline onSave={e=>setSessName(e.value)}></EditText> */}
         </div>
         <div className="row mb-2">
             <span className="span-input">
