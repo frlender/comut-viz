@@ -64,6 +64,7 @@ export default function InputView(props){
             setTb(df2)
             setLoading(false)
             setShowExampleBtn(false)
+            props.setSession(undefined)
             df2.columns.forEach(e=>{
                 if(sampleColNames.includes(e) && sampleCol === '-'){
                     sampleCol = e
@@ -109,6 +110,7 @@ export default function InputView(props){
                 setSampleCol('Tumor_Sample_Barcode')
                 setGeneCol('Hugo_Symbol')
                 setMutCol('Variant_Classification')
+                props.setSession(undefined)
             })
         
         if(fmeta)
