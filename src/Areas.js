@@ -144,10 +144,10 @@ class VMmat extends Gi{
 
 class YLabels extends Gi{
     draw(labels,sample_count,padding=5){
-        const mp = {}
-        sample_count.$index.forEach((x,i)=>{
-            mp[x] = sample_count.$data[i]
-        })
+        // const mp = {}
+        // sample_count.index.values.forEach((x,i)=>{
+        //     mp[x] = sample_count.$data[i]
+        // })
 
         const y = d3.scaleBand()
                 .domain(labels)
@@ -170,7 +170,7 @@ class YLabels extends Gi{
             .attr('font-size',`${this.fs}px`)
 
         gs.append('title')
-            .text(d=>`sample count ${mp[d]}`)
+            .text(d=>`sample count ${sample_count.loc(d)}`)
 
         return this
     }
@@ -381,8 +381,8 @@ class YBar extends Gi{
         const pcts = []
         const tag = 'sample percentage'
         // console.log(sample_count)
-        sample_count.$index.forEach((key,i)=>{
-            const val = sample_count.$data[i]
+        sample_count.index.values.forEach((key,i)=>{
+            const val = sample_count.loc(key)
             arr.push({
                 key: key,
                 total:val,

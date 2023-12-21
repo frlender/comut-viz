@@ -5,6 +5,7 @@ import {Meta} from './Misc';
 import _ from 'lodash'
 import InputHelp from './InputHelp';
 import {ListSessions} from 'react-save-session'
+import {Index,Series, from_raw} from 'jandas'
 
 export default function InputView(props){
     const [loading, setLoading] = useState(null)
@@ -140,12 +141,10 @@ export default function InputView(props){
     }
 
     const enterSession = (session)=>{
-        console.log(session)
-        const sample_count = new pd.Series(
-            session.data.vata.rows.sample_count.$data,
-            {index:session.data.vata.rows.sample_count.$index})
+        // console.log(session)
+        const raw_sample_count = session.data.vata.rows.sample_count
         
-        session.data.vata.rows.sample_count = sample_count
+        session.data.vata.rows.sample_count = from_raw(raw_sample_count)
         props.setVata(session.data.vata)
         session.data.sess.sessName = session.sessName
         session.data.sess.uid = session.uid

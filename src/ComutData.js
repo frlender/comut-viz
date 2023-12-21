@@ -1,7 +1,7 @@
 
 import * as pd from "danfojs";
 import _ from 'lodash'
-
+import { Series } from 'jandas';
 // let ct = 0
 
 function waterfall_sort(df){
@@ -239,7 +239,8 @@ class ComutData{
 
             rows:{ // category
                 cates: this.mat.index,
-                sample_count: sample_count,
+                sample_count: new Series(sample_count.values,
+                    {index:sample_count.index}),
                 min:sample_count.min(), 
                 max:sample_count.max(), 
                 val_count: cate_val_ct.arr(this.mat.index,values)

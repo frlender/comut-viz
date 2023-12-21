@@ -9,6 +9,9 @@ import { Tooltip } from 'react-tooltip'
 import { BiHelpCircle } from "react-icons/bi";
 import _ from 'lodash'
 import { SaveSession } from 'react-save-session';
+import * as yml from 'js-yaml'
+import { from_raw } from 'jandas';
+import { DataFrame } from 'jandas';
 
 const colorSchemes = {
     // only use hex color values as that is the only accepted format for the input element.
@@ -68,8 +71,18 @@ function cl_mp_init(props){
     return cl_mpo
 }
 
+function get_vata_export(vata){
+    const sample_count = vata.rows.sample_count
+    delete vata.rows.sample_count
+    vata.rows.sample_count = sample_count.to_raw()
+    const vata_copy = structuredClone(vata)
+    vata.rows.sample_count = sample_count
+    return vata_copy
+}
+
 export default function Viz(props){
     // console.log(props)
+    const vataRef = useRef(props.vata)
     const [vata,setVata] = useState(props.vata)
     // const [cl,setCl] = useState(get_cl_mp(props.vata.rects.values))
     const [cl_info, setCl_info] = useState(null)
@@ -103,7 +116,7 @@ export default function Viz(props){
     const getSessData = ()=>{
         colorSchemes['default'] = defaultColors.current
         return {
-            vata:vata,
+            vata:get_vata_export(vata),
             sess:{
                 colorSchemeName: colorSchemeName.current,
                 colorSchemes:colorSchemes,
@@ -174,15 +187,22 @@ export default function Viz(props){
     }
 
     const changeMin = function(e){
+        const minVal = parseInt(e.target.value)
+        const vata2 = changeMinVal(minVal)
+        setVata(vata2)
+    }
+
+    const changeMinVal = function(minVal){
         // TODO update values after changing min
         // console.log(e.target.value)
-        const vata2 = structuredClone(props.vata)
-        const min = parseInt(e.target.value)
-        const sample_count = props.vata.rows.sample_count
-        vata2.rows.sample_count = sample_count.loc(sample_count.ge(min))
+        const vata2 = structuredClone(get_vata_export(vataRef.current))
+        vata2.rows.sample_count = from_raw(vata2.rows.sample_count)
+        const min = minVal
+        const sample_count = vataRef.current.rows.sample_count
+        vata2.rows.sample_count = sample_count.q(`x >= ${min}`)
         vata2.rows.min = min
-        if(min > props.vata.rows.min){
-            const cates = sample_count.loc(sample_count.ge(min)).index
+        if(min > vataRef.current.rows.min){
+            const cates = sample_count.q(`x >= ${min}`).index.__values
             const cate_mp = {}
             cates.forEach((x,i)=>{
                 cate_mp[x] = i
@@ -225,7 +245,7 @@ export default function Viz(props){
             vata2.rows.val_count = cate_val_ct.arr(cates,values)
             vata2.cols.val_count = sample_val_ct.arr(vata2.cols.samples,values)
         }
-        setVata(vata2)
+        return vata2
         // setCl(get_cl_mp(vata2.mat.values))
     }
 
@@ -377,6 +397,68 @@ export default function Viz(props){
         }
     });
 
+    const readData = async (e)=>{
+        // const 
+        const file = e.target.files[0]
+        const txt = await new Response(file).text()
+        const data = yml.load(txt)
+        console.log(data)
+        // const vata2 = structuredClone(props.vata)
+        // vata2.
+        const order = data.__order
+        const rec = {}
+        order.forEach(key=>{
+            rec[key] = []
+        })
+
+        vata.rows.sample_count.index.values.forEach(v=>{
+            order.forEach(key=>{
+                if(data[key].includes(v))
+                    rec[key].push(v)
+            })
+        })
+
+        let cates = []
+        order.forEach(key=>{
+            cates = cates.concat(rec[key])
+        })
+
+        console.log(cates)
+        const cate_mp = {}
+        cates.forEach((x,i)=>{
+            cate_mp[x] = i
+        })
+
+        const vata2 = structuredClone(get_vata_export(props.vata))
+        vata2.rows.sample_count = from_raw(vata2.rows.sample_count)
+
+        const rect_uniq_vals = new Set()
+        const rect_data = []
+        vata2.rects.data.forEach(x=>{
+            if(cates.includes(x.category)){
+                x.i = cate_mp[x.category]
+                rect_data.push(x)
+                x.val.forEach(d=>rect_uniq_vals.add(d.value))
+            }
+        })
+
+        vata2.rects.data = rect_data
+        vata2.rects.values = Array.from(rect_uniq_vals)
+        vata2.rects.shape[0] = cates.length
+        vata2.rows.cates = cates
+        vata2.rows.sample_count = vata2.rows.sample_count.loc(cates)
+        vata2.rows.min = vata2.rows.sample_count.min()
+        vata2.rows.max = vata2.rows.sample_count.max()
+        const vf = new DataFrame(vata2.rows.val_count).set_index('key')
+        vata2.rows.val_count = vf.loc(cates).reset_index().to_dict()
+
+        vataRef.current =vata2
+
+        if(vata2.rows.min < vata.rows.min)
+            setVata(changeMinVal(vata.rows.min))
+        else
+            setVata(vata2)
+    }
 
     return <div className='container-fluid container-pad'>
         <div className="row input-status mb-2 mt-2">
@@ -403,8 +485,8 @@ export default function Viz(props){
                 Keep genes mutated in at least &nbsp;  
             </span>
             <input className='input-filter' type='number' value={vata.rows.min} 
-                min={props.vata.rows.min} 
-                max={props.vata.rows.max} 
+                min={vataRef.current.rows.min} 
+                max={vataRef.current.rows.max} 
                 onChange={changeMin}/> 
             <span className="span-input-2"> &nbsp; samples.
             <a data-tooltip-id="filter-tooltip"  data-tooltip-html="Use this filter to adjust the number of genes visualized in the comutation plot. The larger the threshold the less the number of genes are shown. <br />It retains the genes that are most frequently mutated across samples." className='xtooltip'>
@@ -415,7 +497,8 @@ export default function Viz(props){
                 <span className='ml-2'>{vata.cols.samples.length} samples, </span>
                 <span className='ml-2'>{vata.rects.values.length} mutation types. </span>
             </span>
-              
+            
+            &nbsp;&nbsp; <input type='file' onChange={readData} accept='.yml,.yaml'></input>
         </div>
         {/* <button>set</button> */}
         <div className='row'>
