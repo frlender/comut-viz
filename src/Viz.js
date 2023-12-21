@@ -405,13 +405,13 @@ export default function Viz(props){
         console.log(data)
         // const vata2 = structuredClone(props.vata)
         // vata2.
-        const order = data.__order
+        const order = _.hasIn(data,'__order') ? data.__order : _.keys(data)
         const rec = {}
         order.forEach(key=>{
             rec[key] = []
         })
 
-        vata.rows.sample_count.index.values.forEach(v=>{
+        props.vata.rows.sample_count.index.values.forEach(v=>{
             order.forEach(key=>{
                 if(data[key].includes(v))
                     rec[key].push(v)
@@ -459,6 +459,8 @@ export default function Viz(props){
         else
             setVata(vata2)
     }
+
+    console.log(vataRef.current.rows.min)
 
     return <div className='container-fluid container-pad'>
         <div className="row input-status mb-2 mt-2">

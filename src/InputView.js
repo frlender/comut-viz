@@ -20,9 +20,9 @@ export default function InputView(props){
 
     const [errMsg,setErrMsg] = useState('')
 
-    const sampleColNames = ['Tumor_Sample_Barcode']
-    const geneColNames = ['Hugo_Symbol']
-    const mutColNames = ['Variant_Classification']
+    const sampleColNames = ['Tumor_Sample_Barcode','sample']
+    const geneColNames = ['Hugo_Symbol','category']
+    const mutColNames = ['Variant_Classification','value']
 
     let [sampleCol,setSampleCol] = useState('-')
     let [geneCol,setGeneCol] = useState('-')
