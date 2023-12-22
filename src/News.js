@@ -2,6 +2,17 @@ export default function News(){
   return <div className='news-container'>
     <div className='news-block'>
     <div className='news-title'>
+      <span className="row-head">v0.6.0</span>
+      <span className='news-time'>2023/12/22</span>
+    </div>
+    <div className="news-content">
+      Add Gene Grouping function:
+      <div className='news-paragraph'>The user can now submit a gene groups file to group genes in the final plot. The following example is created by first submitting the <a href='https://github.com/frlender/comut-viz/blob/main/asset/gene-groups-by-pathway.yml'>example gene groups file</a> and then click on the example 141k button. Note that the orange pathway annotations are mannually added in InkScape.</div>
+      <img src='/comut-viz-app/gene_groups_example.png'></img>
+    </div>
+  </div>
+    <div className='news-block'>
+    <div className='news-title'>
       <span className="row-head">v0.5.0</span>
       <span className='news-time'>2023/7/28</span>
     </div>

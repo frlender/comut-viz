@@ -55,7 +55,7 @@ function App(){
                   navigate('/')
                 }}>Comut-viz</span> 
                 <span className='version' 
-                onClick={()=>{navigate('/news')}}>v0.5.0</span>         
+                onClick={()=>{navigate('/news')}}>v0.6.0</span>         
                 <a href='/comut-viz-app/help.pdf' target='_blank' className='help'><BiHelpCircle></BiHelpCircle></a>
               </div>
               <Outlet/>
