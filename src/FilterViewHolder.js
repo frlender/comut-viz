@@ -18,6 +18,8 @@ export default function VizHolder(props){
     })
     
     return <div>
-        {!noData && <FilterView cmeta={props.cmeta} tb={props.tb} setVata={props.setVata}></FilterView>}
+        {!noData && <FilterView cmeta={props.cmeta} tb={props.tb} 
+        setVata={props.setVata}
+        geneGroupsRef={props.geneGroupsRef}></FilterView>}
     </div>
 }

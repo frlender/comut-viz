@@ -397,70 +397,8 @@ export default function Viz(props){
         }
     });
 
-    const readData = async (e)=>{
-        // const 
-        const file = e.target.files[0]
-        const txt = await new Response(file).text()
-        const data = yml.load(txt)
-        console.log(data)
-        // const vata2 = structuredClone(props.vata)
-        // vata2.
-        const order = _.hasIn(data,'__order') ? data.__order : _.keys(data)
-        const rec = {}
-        order.forEach(key=>{
-            rec[key] = []
-        })
-
-        props.vata.rows.sample_count.index.values.forEach(v=>{
-            order.forEach(key=>{
-                if(data[key].includes(v))
-                    rec[key].push(v)
-            })
-        })
-
-        let cates = []
-        order.forEach(key=>{
-            cates = cates.concat(rec[key])
-        })
-
-        console.log(cates)
-        const cate_mp = {}
-        cates.forEach((x,i)=>{
-            cate_mp[x] = i
-        })
-
-        const vata2 = structuredClone(get_vata_export(props.vata))
-        vata2.rows.sample_count = from_raw(vata2.rows.sample_count)
-
-        const rect_uniq_vals = new Set()
-        const rect_data = []
-        vata2.rects.data.forEach(x=>{
-            if(cates.includes(x.category)){
-                x.i = cate_mp[x.category]
-                rect_data.push(x)
-                x.val.forEach(d=>rect_uniq_vals.add(d.value))
-            }
-        })
-
-        vata2.rects.data = rect_data
-        vata2.rects.values = Array.from(rect_uniq_vals)
-        vata2.rects.shape[0] = cates.length
-        vata2.rows.cates = cates
-        vata2.rows.sample_count = vata2.rows.sample_count.loc(cates)
-        vata2.rows.min = vata2.rows.sample_count.min()
-        vata2.rows.max = vata2.rows.sample_count.max()
-        const vf = new DataFrame(vata2.rows.val_count).set_index('key')
-        vata2.rows.val_count = vf.loc(cates).reset_index().to_dict()
-
-        vataRef.current =vata2
-
-        if(vata2.rows.min < vata.rows.min)
-            setVata(changeMinVal(vata.rows.min))
-        else
-            setVata(vata2)
-    }
-
-    console.log(vataRef.current.rows.min)
+    
+    // console.log(vataRef.current.rows.min)
 
     return <div className='container-fluid container-pad'>
         <div className="row input-status mb-2 mt-2">
@@ -499,8 +437,12 @@ export default function Viz(props){
                 <span className='ml-2'>{vata.cols.samples.length} samples, </span>
                 <span className='ml-2'>{vata.rects.values.length} mutation types. </span>
             </span>
+            {/* <span>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Group genes by pathways: &nbsp;
+                <input className='viz-input-file' type='file' onChange={readData} accept='.yml,.yaml'></input>
+                <a href=''>example yaml file</a>
+            </span> */}
             
-            &nbsp;&nbsp; <input type='file' onChange={readData} accept='.yml,.yaml'></input>
         </div>
         {/* <button>set</button> */}
         <div className='row'>

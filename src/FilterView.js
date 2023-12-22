@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import * as pd from "danfojs";
 import {ComutData} from './ComutData';
 import * as d3 from 'd3';
-import {FilterData} from './Misc';
+import {FilterData, GroupGenes} from './Misc';
 import _ from 'lodash'
 import { Tooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
@@ -255,7 +255,13 @@ export default function FilterView(props){
                                 vata = cm.create_vata(waterfall)
                                 vata.cmeta = {arr:[]}
                             }
-                            props.setVata(vata)
+                            if(props.geneGroupsRef.current){
+                                const vata2 = 
+                                    GroupGenes(props.geneGroupsRef.current,
+                                        vata)
+                                props.setVata(vata2)
+                            }else
+                                props.setVata(vata)
                             setLoading(false)
                             navigate('/viz')
                         },1)

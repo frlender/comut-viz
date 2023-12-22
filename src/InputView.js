@@ -6,6 +6,7 @@ import _ from 'lodash'
 import InputHelp from './InputHelp';
 import {ListSessions} from 'react-save-session'
 import {Index,Series, from_raw} from 'jandas'
+import * as yml from 'js-yaml'
 
 export default function InputView(props){
     const [loading, setLoading] = useState(null)
@@ -55,7 +56,7 @@ export default function InputView(props){
                 }
             })
     }
-
+    
     const readData = function(e){
         // console.log(e)
         readFile(e,df => {
@@ -138,6 +139,14 @@ export default function InputView(props){
             setLoading(false)
             setShowExampleBtn(false)
         },'meta')
+    }
+
+    const readGeneGroups = async (e)=>{
+        // const 
+        const file = e.target.files[0]
+        const txt = await new Response(file).text()
+        const data = yml.load(txt)
+        props.geneGroupsRef.current = {data:data}
     }
 
     const enterSession = (session)=>{
@@ -231,11 +240,33 @@ export default function InputView(props){
                         }else{
                             props.setCmeta(null)
                         }
+                        if(props.geneGroupsRef.current){
+                            const geneGroups = props.geneGroupsRef.current
+                            geneGroups.order = _.hasIn(geneGroups.data,'__order') ? 
+                                geneGroups.data.__order : _.keys(geneGroups.data)
+                            geneGroups.genes = []
+                            geneGroups.order.forEach(key=>{
+                                //Assuming genes do not overlap between groups
+                                geneGroups.data[key] = Array.from(new Set(geneGroups.data[key]))
+                                geneGroups.genes = geneGroups.genes.concat(geneGroups.data[key])
+                            })
+                            const bool = tb.loc({columns:[geneCol]}).values.map(x=>
+                                geneGroups.genes.includes(x[0]))
 
-                         // console.log('aaa')
-                         const sub = tb.loc({columns:[sampleCol,geneCol,mutCol]})
-                         // console.log('aab')
-                         props.setTb(sub)
+                            // console.log('aaa')
+                            const sub = tb.loc({
+                                rows: bool,
+                                columns:[sampleCol,geneCol,mutCol]})
+                            // console.log('aab')
+                            props.setTb(sub)
+                        }else{
+                            // console.log('aaa')
+                            const sub = tb.loc({columns:[sampleCol,geneCol,mutCol]})
+                            // console.log('aab')
+                            props.setTb(sub)
+                        }
+
+                         
 
                         // console.log('sub',sub)
                         navigate('/filter')
@@ -264,24 +295,33 @@ export default function InputView(props){
             {/* <span className="example"><a download target="_blank" href='https://raw.githubusercontent.com/frlender/comut-viz-app/gh-pages/example_input.tsv'>example</a></span> */}
         </div>
         <div className="col- pl-5">
-            <div className="mb-1">Sample metadata (Optional):</div>
+            <div className="mb-1">Sample metadata (optional):</div>
             <input className='form-control-i' onChange={readSampleMeta} type='file' accept='.csv,.txt,.tsv'/>
             {/* <span className="example"><a download target="_blank" href='https://raw.githubusercontent.com/frlender/comut-viz-app/gh-pages/example_sample_meta.tsv'>example</a></span> */}
         </div>
-        {showExampleBtn &&
         <div className="col- pl-5">
-           <button className='mt-4 btn btn-success'
-                onClick={()=>loadExample('gallbladder.maf','gallbladder_meta.txt')}>example 5k</button>
-             <button className='ml-2 mt-4 btn btn-success'
-                onClick={()=>loadExample('TCGA-LUSC.maf')}>example 141k</button>
-        </div>}
+            <div className="mb-1">Gene groups (yml file, optional):</div>
+            <input className='form-control-i' onChange={readGeneGroups} type='file' accept='.yml'/>
+            {/* <span className="example"><a download target="_blank" href='https://raw.githubusercontent.com/frlender/comut-viz-app/gh-pages/example_sample_meta.tsv'>example</a></span> */}
+        </div>
+       
     </div>
     }
     {!exampleLoaded && !tb &&
-        <div className='row mt-3 ignore-comment'>
-            <input disabled={tb} checked={rmComment} onChange={e=>setRmComment(!rmComment)} type='checkbox'></input>
-            <span>&nbsp; Ignore comment lines starting with "#".</span>
+        <div className='row mt-2 ignore-comment-row'>
+            <div className='col- ignore-comment'>
+                <input disabled={tb} checked={rmComment} onChange={e=>setRmComment(!rmComment)} type='checkbox'></input>
+                <span>&nbsp; Ignore comment lines starting with "#".</span>
+            </div>
+            {showExampleBtn &&
+            <div className="col- example-buttons">
+                <button className='mt-2 btn btn-success'
+                    onClick={()=>loadExample('gallbladder.maf','gallbladder_meta.txt')}>example 5k</button>
+                <button className='ml-2 mt-2 btn btn-success'
+                    onClick={()=>loadExample('TCGA-LUSC.maf')}>example 141k</button>
+            </div>}
         </div>
+        
     }
 
     {!exampleLoaded && !tb &&

@@ -10,6 +10,16 @@ body {
   grid-template-rows: auto 1fr auto; */
 }
 
+
+
+.example-buttons{
+  margin-left: 4.8rem;
+}
+
+.viz-input-file{
+  width:220px;
+}
+
 .content {
   min-height: calc(100vh - 50px);
 }
@@ -290,8 +300,14 @@ a{
   margin-top: -2px;
 }
 
-.ignore-comment{
+.ignore-comment-row{
   padding-left: 4px;
+  /* margin-top: .9rem; */
+}
+
+.ignore-comment{
+  /* padding-left: 4px; */
+  margin-top: .9rem;
 }
 
 .btn-session{
@@ -301,7 +317,7 @@ a{
 
 
 .rss-list-sessions{
-  margin-top: .6em;
+  margin-top: 1em;
   margin-left: -5px;
 }
 

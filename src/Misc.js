@@ -1,6 +1,7 @@
 import * as pd from "danfojs";
 import _ from 'lodash'
 import {Counter} from './ComutData'
+import { DataFrame } from "jandas";
 
 class Meta{
     constructor(tb,tbo){
@@ -141,6 +142,69 @@ class FilterData{
     }
 }
 
+const GroupGenes =  (geneGroups,vata)=>{
+        
+    const data = geneGroups.data
+    // const vata2 = structuredClone(props.vata)
+    // vata2.
+    // const order = _.hasIn(data,'__order') ? data.__order : _.keys(data)
+    const order = geneGroups.order
+    const rec = {}
+    order.forEach(key=>{
+        rec[key] = []
+    })
+
+    vata.rows.sample_count.index.values.forEach(v=>{
+        order.forEach(key=>{
+            if(data[key].includes(v))
+                rec[key].push(v)
+        })
+    })
+
+    let cates = []
+    order.forEach(key=>{
+        cates = cates.concat(rec[key])
+    })
+
+    // console.log(cates)
+    const cate_mp = {}
+    cates.forEach((x,i)=>{
+        cate_mp[x] = i
+    })
+
+    const vata2 = vata
+
+    // const rect_uniq_vals = new Set()
+    const rect_data = []
+    vata2.rects.data.forEach(x=>{
+        if(cates.includes(x.category)){
+            x.i = cate_mp[x.category]
+            rect_data.push(x)
+            // x.val.forEach(d=>rect_uniq_vals.add(d.value))
+        }
+    })
+
+    vata2.rects.data = rect_data
+    // vata2.rects.values = Array.from(rect_uniq_vals)
+    // vata2.rects.shape[0] = cates.length
+    vata2.rows.cates = cates
+    vata2.rows.sample_count = vata2.rows.sample_count.loc(cates)
+    // vata2.rows.min = vata2.rows.sample_count.min()
+    // vata2.rows.max = vata2.rows.sample_count.max()
+    const vf = new DataFrame(vata2.rows.val_count).set_index('key')
+    vata2.rows.val_count = vf.loc(cates).reset_index().to_dict()
+
+    return vata2
+    // vataRef.current =vata2
+
+    // if(vata2.rows.min < vata.rows.min)
+    //     setVata(changeMinVal(vata.rows.min))
+    // else
+    //     setVata(vata2)
+}
+
+
+
 // function reduceDf(df,limit){
 //     const cates = df.category.unique().values
 //     const samples = df.sample.unique().values
@@ -210,4 +274,4 @@ function get_transform_xy(transformStr){
     return eval(ts)
 }
 
-export {Meta,get_fs,get_transform_xy,FilterData}
+export {Meta,get_fs,get_transform_xy,FilterData,GroupGenes}

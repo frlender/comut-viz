@@ -9,7 +9,7 @@ import {
 import reportWebVitals from './reportWebVitals';
 import './bootstrap.min.css';
 import './index.css';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef} from 'react';
 
 import InputView from './InputView'
 import FilterViewHolder from './FilterViewHolder';
@@ -38,6 +38,7 @@ function App(){
   const [cmeta,setCmeta] = useState(null)
   let navigate = useNavigate();
   const [session, setSession] = useState()
+  const geneGroupsRef = useRef()
 
   useEffect(()=>{
      // add footer text
@@ -62,9 +63,10 @@ function App(){
           <Route path='news' element={<News></News>}/>
           <Route path="/" element={<InputView 
               setVata={setVata} setSession={setSession}
-              setTb={setTb} setCmeta={setCmeta}/>} />
+              setTb={setTb} setCmeta={setCmeta} geneGroupsRef={geneGroupsRef}/>} />
           <Route path='filter' element={<FilterViewHolder
-            cmeta={cmeta} tb={tb} setVata={setVata}></FilterViewHolder>}/>
+            cmeta={cmeta} tb={tb} setVata={setVata}
+            geneGroupsRef={geneGroupsRef}></FilterViewHolder>}/>
           <Route path="viz" element={<VizHolder vata={vata} session={session}/>} />
         </Route>
       </Routes>
