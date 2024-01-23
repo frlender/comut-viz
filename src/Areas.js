@@ -1,6 +1,7 @@
 import * as d3 from 'd3';
 import * as convert from 'color-convert'
 import {get_fs, get_transform_xy} from './Misc'
+import _ from 'lodash'
 
 // 12 colors based on d3.schemeCategory10 and d3.schemePaired
 const colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#e377c2', '#9467bd', 
@@ -376,7 +377,7 @@ class Bar extends Gi{
 }
 
 class YBar extends Gi{
-    draw(sample_count,sample_total,cl){
+    draw(sample_count,groups,sample_total,cl){
         const arr = []
         const pcts = []
         const tag = 'sample percentage'
@@ -422,6 +423,33 @@ class YBar extends Gi{
             .attr('text-anchor','end')
             .attr('x',gx-padding)
             .attr('font-size',`${fs}px`)
+
+        if(!_.isUndefined(groups)){
+            const gt2 = this.g.append('g')
+            const y = d3.scaleBand()
+                    .domain(groups.map((x,i)=>i))
+                    .range([0,this.height])
+            const gp_ends = []
+            groups.forEach((gp,i)=>{
+                if(groups[i+1]!==gp)
+                    gp_ends.push({'gp':gp,'idx':i})
+            })
+            gt2.selectAll('line').data(gp_ends)
+                .join('line')
+                .attr('y1',d=>y(d.idx)+y.bandwidth())
+                .attr('y2',d=>y(d.idx)+y.bandwidth())
+                .attr('x1',gx)
+                .attr('x2',this.width)
+                .attr('stroke','black')
+            
+            gt2.selectAll('text').data(gp_ends)
+                .join('text')
+                .attr('y',d => y(d.idx)+y.bandwidth()-2)
+                .text(d => d.gp)
+                .attr('text-anchor','end')
+                .attr('x',this.width)
+                .attr('font-size',`${fs*1.2}px`)
+        }
         
         return this
         

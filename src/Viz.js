@@ -9,9 +9,7 @@ import { Tooltip } from 'react-tooltip'
 import { BiHelpCircle } from "react-icons/bi";
 import _ from 'lodash'
 import { SaveSession } from 'react-save-session';
-import * as yml from 'js-yaml'
-import { from_raw } from 'jandas';
-import { DataFrame } from 'jandas';
+import { from_raw, Series } from 'jandas';
 
 const colorSchemes = {
     // only use hex color values as that is the only accepted format for the input element.
@@ -81,7 +79,7 @@ function get_vata_export(vata){
 }
 
 export default function Viz(props){
-    // console.log(props)
+    console.log(props)
     const vataRef = useRef(props.vata)
     const [vata,setVata] = useState(props.vata)
     // const [cl,setCl] = useState(get_cl_mp(props.vata.rects.values))
@@ -203,6 +201,7 @@ export default function Viz(props){
         vata2.rows.min = min
         if(min > vataRef.current.rows.min){
             const cates = sample_count.q(`x >= ${min}`).index.__values
+            
             const cate_mp = {}
             cates.forEach((x,i)=>{
                 cate_mp[x] = i
@@ -238,6 +237,15 @@ export default function Viz(props){
             arr.sort((x,y)=>y.val-x.val)
             const values = arr.map(x=>x.key)
 
+            if(!_.isUndefined(vata.rows.groups)){
+                // console.log('groups')
+                const vata = vataRef.current
+                const gp = new Series(vata.rows.groups,
+                    {index:vata.rows.cates})
+                const idx = vata.rows.sample_count.b(`x >= ${min}`)
+                vata2.rows.groups = gp.loc(idx).values
+            }
+                
             vata2.rects.data = data
             vata2.rects.shape[0] = cates.length
             vata2.rects.values = values
@@ -245,6 +253,7 @@ export default function Viz(props){
             vata2.rows.val_count = cate_val_ct.arr(cates,values)
             vata2.cols.val_count = sample_val_ct.arr(vata2.cols.samples,values)
         }
+        // console.log(vata2)
         return vata2
         // setCl(get_cl_mp(vata2.mat.values))
     }
@@ -309,6 +318,7 @@ export default function Viz(props){
         const ybar = new YBar(svg,vm.gx+vm.width,vm.gy,
                     ybar_width,vm.height)
                     .draw(vata.rows.sample_count,
+                        vata.rows.groups,
                         vata.rects.shape[1], cl_mp.pct[''])
         
         const ylabels = new YLabels(svg,0,vm.gy,

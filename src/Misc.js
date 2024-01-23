@@ -154,7 +154,7 @@ const GroupGenes =  (geneGroups,vata)=>{
         rec[key] = []
     })
 
-    vata.rows.sample_count.index.values.forEach(v=>{
+    vata.rows.cates.forEach(v=>{
         order.forEach(key=>{
             if(data[key].includes(v))
                 rec[key].push(v)
@@ -162,8 +162,10 @@ const GroupGenes =  (geneGroups,vata)=>{
     })
 
     let cates = []
+    const groups = []
     order.forEach(key=>{
         cates = cates.concat(rec[key])
+        rec[key].forEach(_=>groups.push(key))
     })
 
     // console.log(cates)
@@ -193,7 +195,8 @@ const GroupGenes =  (geneGroups,vata)=>{
     // vata2.rows.max = vata2.rows.sample_count.max()
     const vf = new DataFrame(vata2.rows.val_count).set_index('key')
     vata2.rows.val_count = vf.loc(cates).reset_index().to_dict()
-
+    vata2.rows.groups = groups
+    
     return vata2
     // vataRef.current =vata2
 
