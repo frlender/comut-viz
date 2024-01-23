@@ -1,5 +1,17 @@
 export default function News(){
   return <div className='news-container'>
+     <div className='news-block'>
+    <div className='news-title'>
+      <span className="row-head">v0.6.5</span>
+      <span className='news-time'>2024/1/23</span>
+    </div>
+    <div className="news-content">
+      Gene Group Annotation (if a gene groups file is provided):
+      
+      <div className='news-paragraph'>1. Lines will be added to the right bar plot to divide them according to the gene groups</div>
+      <div className='news-paragraph'>2. The names of the gene groups will be automatically added to the plot.</div>
+    </div>
+  </div>
     <div className='news-block'>
     <div className='news-title'>
       <span className="row-head">v0.6.0</span>
