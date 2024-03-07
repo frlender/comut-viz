@@ -171,7 +171,10 @@ const GroupGenes =  (geneGroups,vata)=>{
     // console.log(cates)
     const cate_mp = {}
     cates.forEach((x,i)=>{
-        cate_mp[x] = i
+        if(!(x in cate_mp))
+            cate_mp[x] = [i]
+        else
+            cate_mp[x].push(i)
     })
 
     const vata2 = vata
@@ -180,8 +183,11 @@ const GroupGenes =  (geneGroups,vata)=>{
     const rect_data = []
     vata2.rects.data.forEach(x=>{
         if(cates.includes(x.category)){
-            x.i = cate_mp[x.category]
-            rect_data.push(x)
+            cate_mp[x.category].forEach(i=>{
+                const y = {...x}
+                y.i = i
+                rect_data.push(y)
+            })
             // x.val.forEach(d=>rect_uniq_vals.add(d.value))
         }
     })
@@ -196,7 +202,9 @@ const GroupGenes =  (geneGroups,vata)=>{
     const vf = new DataFrame(vata2.rows.val_count).set_index('key')
     vata2.rows.val_count = vf.loc(cates).reset_index().to_dict()
     vata2.rows.groups = groups
+    vata2.rects.shape[0] = cates.length
     
+    console.log('def')
     return vata2
     // vataRef.current =vata2
 

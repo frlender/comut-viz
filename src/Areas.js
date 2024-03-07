@@ -151,8 +151,9 @@ class YLabels extends Gi{
         // })
 
         const y = d3.scaleBand()
-                .domain(labels)
+                .domain(labels.map((x,i)=>i))
                 .range([0,this.height])
+        console.log('ylabel',this.height)
         this.y = y
         this.padding = padding
 
@@ -161,8 +162,8 @@ class YLabels extends Gi{
         this.fs = fsh < fsw? fsh:fsw
         const gs = this.g.selectAll('text').data(labels)
             .join('g')
-            .attr('transform',d => 
-                `translate(0,${y(d)+y.bandwidth()/2*1.6})`)
+            .attr('transform',(d,i) => 
+                `translate(0,${y(i)+y.bandwidth()/2*1.6})`)
             // .attr('y',d => y(d)+y.bandwidth()/2*1.6)
         gs.append('text')
             .text(d => d)
@@ -321,15 +322,17 @@ class Bar extends Gi{
         this.config(mode)
         const keys = []
         const totals = []
-        val_count.forEach(d=>{
+        const indices = []
+        val_count.forEach((d,i)=>{
             keys.push(d.key)
             totals.push(d.total)
+            indices.push(i)
         })
         const total_max = d3.max(totals)
         const [lw,sw] = [this.lw, this.sw] 
 
         const l = d3.scaleBand()
-                .domain(keys)
+                .domain(indices)
                 .range([0,lw])
                 // .padding(0.2)
         const s = d3.scaleLinear()
@@ -338,8 +341,8 @@ class Bar extends Gi{
         
         const gs = this.g.selectAll('g').data(val_count)
                         .join('g')
-                        .attr('transform', d => {
-                            return this.translate(l(d.key),0)
+                        .attr('transform', (d,i) => {
+                            return this.translate(l(i),0)
                         })
         
         const rect_lw = l.bandwidth()*2/3
@@ -383,7 +386,7 @@ class YBar extends Gi{
         const tag = 'sample percentage'
         // console.log(sample_count)
         sample_count.index.values.forEach((key,i)=>{
-            const val = sample_count.loc(key)
+            const val = sample_count.iloc(i)
             arr.push({
                 key: key,
                 total:val,
@@ -411,14 +414,14 @@ class YBar extends Gi{
         
         
        const y = d3.scaleBand()
-                    .domain(pcts.map(x=>x.key))
+                    .domain(pcts.map((x,i)=>i))
                     .range([0,this.height])
 
         const fs = get_fs(d3.max(pcts.map(d=>d.val.length)),gx,this.height/pcts.length)
         const padding = 3
         gt.selectAll('text').data(pcts)
             .join('text')
-            .attr('y',d => y(d.key)+y.bandwidth()/2+fs*.5)
+            .attr('y',(d,i) => y(i)+y.bandwidth()/2+fs*.5)
             .text(d => d.val)
             .attr('text-anchor','end')
             .attr('x',gx-padding)

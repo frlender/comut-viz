@@ -204,30 +204,41 @@ export default function Viz(props){
             
             const cate_mp = {}
             cates.forEach((x,i)=>{
-                cate_mp[x] = i
+                if(!(x in cate_mp))
+                    cate_mp[x] = [i]
+                else
+                    cate_mp[x].push(i)
             })
             
-            const cate_val_ct = new Counter('category') // # of muts in each cate
-            const sample_val_ct = new Counter('sample')
+            // const cate_val_ct = new Counter('category') // # of muts in each cate
+            // const sample_val_ct = new Counter('sample')
 
             const ct = {'multiple':0} // value total count
             const data = []
+            let skipCount = 0
             vata2.rects.data.forEach(x=>{
-                if(cates.includes(x.category)){
-                    x.i = cate_mp[x.category]
-                    data.push(x)
+                if(cates.includes(x.category) && skipCount===0){
+                    const i_arr = cate_mp[x.category]
+                    skipCount = i_arr.length
+                    i_arr.forEach((i,j)=>{
+                        const y = j === 0 ? 
+                            x:{...x}
+                        y.i = i
+                        data.push(y)
+                    })
 
                     x.val.forEach(d=>{
                         if(!(d.value in ct)) ct[d.value] = 0;
                         ct[d.value] += d.count
                         
-                        cate_val_ct.add(x.category,d.value,d.count)
-                        sample_val_ct.add(x.sample,d.value,d.count)
+                        // cate_val_ct.add(x.category,d.value,d.count)
+                        // sample_val_ct.add(x.sample,d.value,d.count)
                     })
 
                     if(x.val.length > 2) ct['multiple'] += 1
-
                 }
+                if(skipCount>0)
+                    skipCount -= 1
             })
 
             let arr = []
@@ -250,8 +261,8 @@ export default function Viz(props){
             vata2.rects.shape[0] = cates.length
             vata2.rects.values = values
             vata2.rows.cates = cates
-            vata2.rows.val_count = cate_val_ct.arr(cates,values)
-            vata2.cols.val_count = sample_val_ct.arr(vata2.cols.samples,values)
+            // vata2.rows.val_count = cate_val_ct.arr(cates,values)
+            // vata2.cols.val_count = sample_val_ct.arr(vata2.cols.samples,values)
         }
         // console.log(vata2)
         return vata2

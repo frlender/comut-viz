@@ -2,6 +2,16 @@ export default function News(){
   return <div className='news-container'>
      <div className='news-block'>
     <div className='news-title'>
+      <span className="row-head">v0.7.0</span>
+      <span className='news-time'>2024/3/7</span>
+    </div>
+    <div className="news-content">
+      Gene Group Annotation (if a gene groups file is provided):
+      <div className='news-paragraph'>1. Overlapping genes are now allowed between different gene groups in the gene groups file. In other words, a gene can belong to multiple gene groups.</div>
+    </div>
+  </div>
+     <div className='news-block'>
+    <div className='news-title'>
       <span className="row-head">v0.6.5</span>
       <span className='news-time'>2024/1/23</span>
     </div>
