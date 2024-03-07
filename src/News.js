@@ -7,7 +7,7 @@ export default function News(){
     </div>
     <div className="news-content">
       Gene Group Annotation (if a gene groups file is provided):
-      <div className='news-paragraph'>1. Overlapping genes are now allowed between different gene groups in the gene groups file. In other words, a gene can belong to multiple gene groups.</div>
+      <div className='news-paragraph'>Overlapping genes are now allowed between different gene groups in the gene groups file. In other words, a gene can belong to multiple gene groups.</div>
     </div>
   </div>
      <div className='news-block'>
