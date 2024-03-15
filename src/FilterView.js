@@ -161,25 +161,40 @@ export default function FilterView(props){
         if(Object.keys(mp).length > 0)
             df.rename(mp,{inplace:true})
 
+        const idx = []
+        const notNullIdx = []
+        let silentKey
+        const uniqValsSet = new Set()
+        df['value'].values.forEach(x=>{
+            if(_.isNil(x)){
+                idx.push(false)
+                notNullIdx.push(false)
+            }else{
+                uniqValsSet.add(x)
+                notNullIdx.push(true)
+                if(x.toLowerCase().includes('silent')){
+                    if(!silentKey) silentKey = x
+                    idx.push(false)
+                }else{
+                    idx.push(true)
+                }
+            }
+        })
+
         // fdo.current = df
         // console.log(df.columns)
-        fdo.current = new FilterData(df,true)
+        const df2 = df.loc({rows:notNullIdx})
+        fdo.current = new FilterData(df2,true)
         let fd;
 
-        const uniqVals = df['value'].unique().values
+        const uniqVals = Array.from(uniqValsSet)
 
         //uncheck silent mutations by default as in maftools.
-        let silentKey = null
-        uniqVals.forEach(x=>{
-            // console.log(x,'=== in silent key check')
-            if(x.toLowerCase().includes('silent'))
-            silentKey = x
-        }) 
         // console.log(silentKey)       
         if(silentKey){
-            const idx = fdo.current.df['value'].map(v=>!(v===silentKey))
-            const df = fdo.current.df.loc({rows:idx})
-            fd = new FilterData(df)
+            // const idx = fdo.current.df['value'].map(v=>!(v===silentKey))
+            const df2 = df.loc({rows:idx})
+            fd = new FilterData(df2)
         }else
             fd = fdo.current
 
