@@ -17,6 +17,7 @@
     "jandas": "^1.0.9",
     "js-yaml": "^4.1.0",
     "loadash": "^1.0.0",
+    "primereact": "^10.6.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-edit-text": "^5.1.1",

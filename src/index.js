@@ -9,6 +9,8 @@ import {
 import reportWebVitals from './reportWebVitals';
 import './bootstrap.min.css';
 import './index.css';
+import "primereact/resources/themes/lara-light-cyan/theme.css";
+
 import React, { useEffect, useState, useRef} from 'react';
 
 import InputView from './InputView'
