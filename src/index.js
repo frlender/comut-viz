@@ -35,6 +35,7 @@ import News from './News';
 
 
 function App(){
+  const version = 'v0.7.6'
   const [vata,setVata] = useState(null)
   const [tb,setTb] = useState(null)
   const [cmeta,setCmeta] = useState(null)
@@ -57,7 +58,7 @@ function App(){
                   navigate('/')
                 }}>Comut-viz</span> 
                 <span className='version' 
-                onClick={()=>{navigate('/news')}}>v0.7.2</span>         
+                onClick={()=>{navigate('/news')}}>{version}</span>         
                 <a href='/comut-viz-app/help.pdf' target='_blank' className='help'><BiHelpCircle></BiHelpCircle></a>
               </div>
               <Outlet/>

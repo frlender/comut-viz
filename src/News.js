@@ -1,5 +1,16 @@
 export default function News(){
   return <div className='news-container'>
+    <div className='news-block'>
+    <div className='news-title'>
+      <span className="row-head">v0.7.6</span>
+      <span className='news-time'>2024/6/17</span>
+    </div>
+    <div className="news-content">
+      Choose how to join data and metadata:
+      <div className='news-paragraph'>Previously, data and metadata were  joined in the way that only the common samples between data and metadata are shown in the final figure. Now users can choose to show all samples in the data even if a metadata file is available. Samples with no metadata will have their metadata fields set to nulls. </div>
+      <img style={{marginTop: '.5em',width:'95%'}} src='/comut-viz-app/meta_join.png'></img>
+    </div>
+  </div>
      <div className='news-block'>
     <div className='news-title'>
       <span className="row-head">v0.7.0</span>
