@@ -18,6 +18,7 @@ export default function VizHolder(props){
     })
     
     return <div>
-        {!noData && <Viz vata={props.vata} session={props.session}></Viz>}
+        {!noData && <Viz vata={props.vata} session={props.session} 
+         inputFnamesRef={props.inputFnamesRef}></Viz>}
     </div>
 }

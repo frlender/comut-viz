@@ -10,6 +10,7 @@ import { BiHelpCircle } from "react-icons/bi";
 import _ from 'lodash'
 import { SaveSession } from 'react-save-session';
 import { from_raw, Series } from 'jandas';
+import { DataFrame } from 'danfojs';
 
 const colorSchemes = {
     // only use hex color values as that is the only accepted format for the input element.
@@ -121,6 +122,7 @@ export default function Viz(props){
                 cl_mp: cl_mp,
                 wh: wh,
                 geneLabelWidth: geneLabelWidth,
+                inputFnames: props.inputFnamesRef.current
             }
         }
     }
@@ -418,7 +420,27 @@ export default function Viz(props){
         }
     });
 
-    
+    const getFnames = ()=>{
+        let dataFname,metaFname,geneGroupsFname
+        if(props.session){
+            if(props.session.inputFnames){
+                dataFname = props.session.inputFnames.data
+                metaFname = props.session.inputFnames.meta
+                geneGroupsFname = props.session.inputFnames.geneGroups
+            }
+        }else{
+            dataFname = props.inputFnamesRef.current.data
+            metaFname = props.inputFnamesRef.current.meta
+            geneGroupsFname = props.inputFnamesRef.current.geneGroups
+        }
+        if(dataFname){
+            const metaStr = metaFname ? `, ${metaFname}` : ''
+            const geneGroupsStr = geneGroupsFname ? `, ${geneGroupsFname}` : ''
+            return dataFname+metaStr+geneGroupsStr
+        }else{
+            return undefined
+        }  
+    }
     // console.log(vataRef.current.rows.min)
 
     return <div className='container-fluid container-pad'>
@@ -479,6 +501,9 @@ export default function Viz(props){
             </div>
             </div>
         </div>
+        {getFnames() && <div className='row'>
+            Input file names: {getFnames()}
+        </div>}
     </div> 
     
 }

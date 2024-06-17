@@ -35,13 +35,14 @@ import News from './News';
 
 
 function App(){
-  const version = 'v0.7.6'
+  const version = 'v0.7.8'
   const [vata,setVata] = useState(null)
   const [tb,setTb] = useState(null)
   const [cmeta,setCmeta] = useState(null)
   let navigate = useNavigate();
   const [session, setSession] = useState()
   const geneGroupsRef = useRef()
+  const inputFnamesRef = useRef({})
 
   useEffect(()=>{
      // add footer text
@@ -66,11 +67,13 @@ function App(){
           <Route path='news' element={<News></News>}/>
           <Route path="/" element={<InputView 
               setVata={setVata} setSession={setSession}
-              setTb={setTb} setCmeta={setCmeta} geneGroupsRef={geneGroupsRef}/>} />
+              setTb={setTb} setCmeta={setCmeta} geneGroupsRef={geneGroupsRef}
+              inputFnamesRef={inputFnamesRef}/>} />
           <Route path='filter' element={<FilterViewHolder
             cmeta={cmeta} tb={tb} setVata={setVata}
             geneGroupsRef={geneGroupsRef}></FilterViewHolder>}/>
-          <Route path="viz" element={<VizHolder vata={vata} session={session}/>} />
+          <Route path="viz" element={<VizHolder vata={vata} session={session}
+            inputFnamesRef={inputFnamesRef}/>} />
         </Route>
       </Routes>
     </div>

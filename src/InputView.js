@@ -11,6 +11,7 @@ import { Dialog } from 'primereact/dialog';
 
 
 export default function InputView(props){
+    console.log(props)
     const [loading, setLoading] = useState(null)
     const [dialogVisible, setDialogVisible] = useState(false)
     let [tb,setTb] = useState(null)
@@ -67,7 +68,7 @@ export default function InputView(props){
     }
     
     const readData = function(e){
-        // console.log(e)
+        props.inputFnamesRef.current.data = e.target.files[0].name
         readFile(e,df => {
             // console.log(df)
             const df2 = df
@@ -105,6 +106,8 @@ export default function InputView(props){
     //         })
     //   }
       const loadExample = function(fname,fmeta){
+        props.inputFnamesRef.current.data = fname
+        props.inputFnamesRef.current.meta = fmeta
         const loadStr = fname === 'TCGA-LUSC.maf' ? 
             'loading ... (may take about 1 min)' : 'loading...'
         setLoading(loadStr)
@@ -137,6 +140,7 @@ export default function InputView(props){
       }
 
       const readSampleMeta = function(e){
+        props.inputFnamesRef.current.meta = e.target.files[0].name
         readFile(e, dfi =>{
             // const df = dfi.dropNa({ axis: 1 })
             // const dfo = df.copy()
@@ -154,6 +158,7 @@ export default function InputView(props){
     const readGeneGroups = async (e)=>{
         // const 
         const file = e.target.files[0]
+        props.inputFnamesRef.current.geneGroups = file.name
         const txt = await new Response(file).text()
         const data = yml.load(txt)
         props.geneGroupsRef.current = {data:data}

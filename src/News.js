@@ -1,5 +1,15 @@
 export default function News(){
   return <div className='news-container'>
+     <div className='news-block'>
+    <div className='news-title'>
+      <span className="row-head">v0.7.8</span>
+      <span className='news-time'>2024/6/17</span>
+    </div>
+    <div className="news-content">
+      Input file names:
+      <div className='news-paragraph'>Input file names will now be shown at the bottom of the visualization view and saved along with other visualization data during session saving. This feature will help users to keep track of the input files used for a plot recovered from a saved session.</div>
+    </div>
+  </div>
     <div className='news-block'>
     <div className='news-title'>
       <span className="row-head">v0.7.6</span>
