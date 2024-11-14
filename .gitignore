@@ -11,6 +11,9 @@
 # production
 /build
 
+public/example.maf
+public/example_meta.txt
+
 
 # misc
 .DS_Store

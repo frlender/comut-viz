@@ -35,7 +35,7 @@ import News from './News';
 
 
 function App(){
-  const version = 'v0.7.8'
+  const version = 'v0.8.2'
   const [vata,setVata] = useState(null)
   const [tb,setTb] = useState(null)
   const [cmeta,setCmeta] = useState(null)
@@ -64,7 +64,7 @@ function App(){
               </div>
               <Outlet/>
             </div>}>
-          <Route path='news' element={<News></News>}/>
+          <Route path='news' element={<News version={version}></News>}/>
           <Route path="/" element={<InputView 
               setVata={setVata} setSession={setSession}
               setTb={setTb} setCmeta={setCmeta} geneGroupsRef={geneGroupsRef}

@@ -1,5 +1,19 @@
-export default function News(){
+export default function News(props){
   return <div className='news-container'>
+         <div className='news-block'>
+      <div className='news-title'>
+        <span className="row-head">v0.8.2</span>
+        <span className='news-time'>2024/11/14</span>
+      </div>
+      <div className="news-content">
+        Multiple bar plots:
+        <div className='news-paragraph'>With this release, you can visualize sample metadata as bar plots.</div>
+        <img src='/comut-viz-app/example_bar.png'></img>
+        <div style={{"margin-top":"1.5em"}} className='news-paragraph'>All you need to do is to add the bar plot data as columns in the metadata file with the column names in the format of [description]@[group_id]. You can check an example by clicking on the "example 5k" button.</div>
+        <img style={{"margin-left":"3em"}} src='/comut-viz-app/example_bar_metadata_file.png'></img>
+      </div>
+  </div>
+
      <div className='news-block'>
     <div className='news-title'>
       <span className="row-head">v0.7.8</span>
@@ -55,7 +69,7 @@ export default function News(){
     </div>
   </div>
     <div className='news-block'>
-    <div className='news-title'>
+    <div className='news-title' >
       <span className="row-head">v0.5.0</span>
       <span className='news-time'>2023/7/28</span>
     </div>

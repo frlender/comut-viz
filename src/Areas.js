@@ -317,7 +317,7 @@ class Bar extends Gi{
         }
     }
 
-    draw(mode,val_count,cl,title_fun=null){
+    draw(name,mode,val_count,cl,title_fun=null){
         // pr is padding between stacked rect
         this.config(mode)
         const keys = []
@@ -370,6 +370,17 @@ class Bar extends Gi{
         }
         gs.each(title_fun)
         
+        if(!_.isUndefined(name)){
+            const gt = this.g.append('g')
+                .attr('transform',`translate(${this.lw+8},${this.sw/7*5})`)
+            gt.append('text')
+                .text(name)
+                .attr('text-anchor','start')
+                // .attr('y',5)
+                // .attr('x',10)
+                .attr('font-size',12)
+                .attr('fill','black')
+        }
         // A padding of 1px removes bottom overhang of the 1st tick of xbar axis 
         // because of its line width. 
         const s2 = d3.scaleLinear()
@@ -380,7 +391,7 @@ class Bar extends Gi{
 }
 
 class YBar extends Gi{
-    draw(sample_count,groups,sample_total,cl){
+    draw(name,sample_count,groups,sample_total,cl){
         const arr = []
         const pcts = []
         const tag = 'sample percentage'
@@ -407,7 +418,7 @@ class YBar extends Gi{
         const gt = this.g.append('g')
         const gx = this.width/3
         const ybar = new Bar(this.g,gx,0,this.width-gx,this.height)
-                    .draw('ybar',arr,cl_mp, function(d){
+                    .draw(name,'ybar',arr,cl_mp, function(d){
                         d3.select(this).append('title')
                         .text(`${d.key}\nsample count ${d.total}`)
                     })
@@ -486,7 +497,8 @@ class Legend extends Gi{
         const y = d3.scaleBand()
                 .domain(labels)
                 .range([0,height])
-    
+        
+        this.actual_height = height
         
         let rect_width = area_width*7/10
         let rect_height = y.bandwidth()/2

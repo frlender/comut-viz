@@ -47,7 +47,7 @@ function cl_mp_init(props){
     if('cmeta' in props.vata){
         let ct = 0
         props.vata.cmeta.arr.forEach(d =>{
-            if(d.dtype === 'string'){
+            if(d.dtype === 'string' || d.dtype === 'bar'){
                 cl_mpo[d.id] = get_cl_mp(d.domain)
             }else{
                 cl_mpo[d.id] = colors[ct % 12]
@@ -311,9 +311,10 @@ export default function Viz(props){
         const indi_height_each = margin/2*1.2
         const xlabel_height = margin*2
         
-
+        const indi_bar_count = vata.cmeta.arr.filter(x=>x.dtype === 'bar').length
         
-        const indi_height = vata.cmeta.arr.length*indi_height_each
+        const indi_no_bar_height = (vata.cmeta.arr.length-indi_bar_count)*indi_height_each
+        const indi_height = (indi_no_bar_height + indi_bar_count*xbar_height)
 
         const vm = new VMmat(svg,ylabel_width,margin+xbar_height+indi_height,
                 width-ylabel_width-ybar_width-margin,
@@ -322,7 +323,7 @@ export default function Viz(props){
         
         // use vata.cols.val_count to plot bars with only top mutated genes.
         const xbar = new Bar(svg,vm.gx,margin,vm.width,xbar_height)
-                    .draw('xbar',vata.cols.tmb_count,cl_mp.vm)
+                    .draw(undefined,'xbar',vata.cols.tmb_count,cl_mp.vm)
         
         // const ybar = new Bar(svg,vm.gx+vm.width,vm.gy,
         //             ybar_width,vm.height)
@@ -330,7 +331,7 @@ export default function Viz(props){
         
         const ybar = new YBar(svg,vm.gx+vm.width,vm.gy,
                     ybar_width,vm.height)
-                    .draw(vata.rows.sample_count,
+                    .draw(undefined,vata.rows.sample_count,
                         vata.rows.groups,
                         vata.rects.shape[1], cl_mp.pct[''])
         
@@ -342,9 +343,17 @@ export default function Viz(props){
         //             vm.width,xlabel_height)
         //             .draw(vata.cols.samples)
         
+        const indi_bars = []
+        vata.cmeta.arr.filter(x=>x.dtype === 'bar').forEach((item,i) =>{
+            const indi_bar = new Bar(svg,vm.gx,margin+xbar_height+xbar_height*i,
+                vm.width,xbar_height)
+                    .draw(item.name,'xbar',vata.cmeta.mp[item.id],cl_mp[item.id])
+            indi_bars.push(indi_bar)
+        })
+        
         const indis = [];
-        vata.cmeta.arr.forEach((item,i) => {
-            const indi = new Indicator(svg,vm.gx,vm.gy-indi_height+indi_height_each*i,
+        vata.cmeta.arr.filter(x=>x.dtype !== 'bar').forEach((item,i) => {
+            const indi = new Indicator(svg,vm.gx,vm.gy-indi_no_bar_height+indi_height_each*i,
                 vm.width,indi_height_each)
                     .draw(item, vata.cmeta.mp[item.id],
                         cl_mp[item.id], ylabels)
@@ -364,9 +373,13 @@ export default function Viz(props){
         const grad_lg_width = margin*3
         const grad_lg_height = margin*5
 
-        let lg_width_tt = lg_width*2 // vm + pct
+        const max_per_row = 6
+        var accu_height = margin
+        var row_max_height = 0
+
+        let lg_width_tt = lg_width*.3 // vm + pct
         vata.cmeta.arr.forEach(d=>{
-            lg_width_tt += d.dtype === 'string'?lg_width : grad_lg_width
+            lg_width_tt += (d.dtype === 'string' || d.dtype === 'bar')?lg_width : grad_lg_width
         })
 
         const svg_lg = d3.select('#lg').append('svg')
@@ -383,22 +396,37 @@ export default function Viz(props){
                     lg_width,lg_height)
                     .draw(vm.cl,item_vm_lg,setCl_info)
         
+        row_max_height = vm_lg.actual_height
+
         const lgs = []
         let accu = vm_lg.gx+vm_lg.width
         vata.cmeta.arr.forEach((item,i) => {
             let lg;
-            if(item.dtype === 'string'){
-                lg = new Legend(svg_lg,accu,margin,
+            if(item.dtype === 'bar'){
+                lg = new Legend(svg_lg,accu,accu_height,
                     lg_width,lg_height)
                     .draw(cl_mp[item.id],item,setCl_info)
+                row_max_height = lg.actual_height > row_max_height ? lg.actual_height : row_max_height
+                accu += lg_width
+            }else if(item.dtype === 'string'){
+                lg = new Legend(svg_lg,accu,accu_height,
+                    lg_width,lg_height)
+                    .draw(cl_mp[item.id],item,setCl_info)
+                row_max_height = lg.actual_height > row_max_height ? lg.actual_height : row_max_height
                 accu += lg_width
             }else{
                 lg = new GradLegend(svg_lg,
                     accu,
-                    margin,
+                    accu_height,
                     grad_lg_width,grad_lg_height)
                     .draw(cl_mp[item.id],item,setCl_info)
+                row_max_height = grad_lg_height > row_max_height ? grad_lg_height : row_max_height
                 accu += grad_lg_width
+            }
+            if((i+2)%max_per_row === 0){
+                accu_height += row_max_height + margin
+                row_max_height = 0
+                accu = margin
             }
             lgs.push(lg)
             
@@ -408,7 +436,7 @@ export default function Viz(props){
             id:'pct', name: 'Mutation Pct', 
             domain:['']
         }
-        const pct_lg = new Legend(svg_lg,accu,margin,
+        const pct_lg = new Legend(svg_lg,accu,accu_height,
                     lg_width,lg_height/3)
                     .draw(cl_mp[item_pct_lg.id],item_pct_lg,setCl_info)
         

@@ -39,6 +39,7 @@ export default function InputView(props){
     let [geneCol,setGeneCol] = useState('-')
     let [mutCol,setMutCol] = useState('-')
     let [metaSampleCol, setMetaSampleCol] = useState('')
+    // console.log(metaSampleCol,'metaSampleCol')
 
     const [fname,setFname] = useState('')
     const [fmeta,setFmeta] = useState('')
@@ -116,8 +117,12 @@ export default function InputView(props){
 
         pd.readCSV(`/comut-viz-app/${fname}`,{'header':true,'skipEmptyLines':true})
             .then(df=>{
-                // console.log(df)
-                const df2 = df.dropNa({ axis: 1 })
+                // console.log('read example',df)
+                var df2;
+                if(fname === 'example.maf')
+                    df2 = df
+                else
+                    df2 = df.dropNa({ axis: 1 })
                 setTb(df2)
                 setLoading(false)
                 setExampleLoaded(true)
@@ -133,7 +138,16 @@ export default function InputView(props){
                 const dfo = df.copy()
                 // df.setIndex({column:df.columns[0],inplace:true,drop:true})
                 setMetaTb(dfo)
-                setMetaSampleCol(dfo.columns[0])
+                var find_col = false
+                for(var col of dfo.columns){
+                    if(sampleColNames.includes(col)){
+                        setMetaSampleCol(col)
+                        find_col = true
+                        break
+                    }
+                }
+                if(!find_col)
+                    setMetaSampleCol(dfo.columns[0])
                 // console.log(fmeta,df)
                 // setLoading(false)
             })
@@ -146,7 +160,17 @@ export default function InputView(props){
             // const dfo = df.copy()
             const dfo = dfi
             setMetaTb(dfo)
-            setMetaSampleCol(dfo.columns[0])
+            var find_col = false
+                for(var col of dfo.columns){
+                    if(sampleColNames.includes(col)){
+                        setMetaSampleCol(col)
+                        find_col = true
+                        break
+                    }
+                }
+            if(!find_col)
+                setMetaSampleCol(dfo.columns[0])
+            // setMetaSampleCol(dfo.columns[0])
             // df.setIndex({column:df.columns[0],inplace:true,drop:true})
             // setCmeta(new Meta(df,dfo))
             setLoading(false)
@@ -370,11 +394,13 @@ export default function InputView(props){
             {showExampleBtn &&
             <div className="col- example-buttons">
                 <button className='mt-2 btn btn-success'
-                    onClick={()=>loadExample('gallbladder.maf','gallbladder_meta.txt')}>example 5k</button>
+                    onClick={()=>loadExample('gallbladder.maf','gallbladder_meta_bar.txt')}>example 5k</button>
                 {/* <button className='mt-2 btn btn-success'
                     onClick={()=>loadExample('gallbladder.maf','gallbladder_meta_fewer_samples.txt')}>example 5k</button> */}
                 <button className='ml-2 mt-2 btn btn-success'
                     onClick={()=>loadExample('TCGA-LUSC.maf')}>example 141k</button>
+                {/* <button className='ml-2 mt-2 btn btn-success'
+                    onClick={()=>loadExample('example.maf','example_meta.txt')}>example</button> */}
             </div>}
         </div>
         
@@ -443,7 +469,7 @@ export default function InputView(props){
         <div className='row mt-4'>
             <div className='col-'>Select the Sample ID column in the metadata:</div>
             <div className='col- pl-2'>
-                <select 
+                <select value={metaSampleCol}
                 onChange={(e)=>{setMetaSampleCol(e.target.value)}}>
                     {metaTb.columns.map(x=>
                     <option key={'sample'+x}>{x}</option>)}

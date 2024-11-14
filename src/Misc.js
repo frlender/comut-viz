@@ -13,31 +13,68 @@ class Meta{
         const arr = []
         const mp = {}
         const tb = this.tb.loc({rows:order})
-        tb.columns.forEach(col=>{
-            const ss = tb[col]
-            const dtype = ss.dtypes[0]
-            const item = {
-                name: col,
-                id: col+'_'+Math.random().toString(16).substring(2, 10),
-                dtype: dtype,
-            }
-
-            if(dtype === 'string'){
-                item.val_count = ss.valueCounts().sortValues({ascending:false})
-                item.domain = item.val_count.index
+        const bar_cols = {}
+        for(var col of tb.columns){
+            var item;
+            if(col.includes('@')){
+                col = col.split('@')[0]
+                if(!(col in bar_cols)){
+                    const col_subs = tb.columns.filter(d=>d.startsWith(col+'@'))
+                    bar_cols[col] = col_subs
+                    const domain = col_subs.map(d=>d.split('@')[1])
+                    item = {
+                        domain: domain,
+                        name: col,
+                        id: col+'_'+Math.random().toString(16).substring(2, 10),
+                        dtype: 'bar'
+                    }
+                    // bar_cols.push(col)
+                }else
+                    continue
             }else{
-                item.domain = [ss.min(),ss.max()]
+                const ss = tb[col]
+                const dtype = ss.dtypes[0]
+                item = {
+                    name: col,
+                    id: col+'_'+Math.random().toString(16).substring(2, 10),
+                    dtype: dtype,
+                }
+
+                if(dtype === 'string'){
+                    item.val_count = ss.valueCounts().sortValues({ascending:false})
+                    item.domain = item.val_count.index
+                }else{
+                    item.domain = [ss.min(),ss.max()]
+                }
             }
             arr.push(item)
 
-            
-            mp[item['id']] =  order.map(d=>{
-                return {
-                    label: d,
-                    value: tb.at(d,col) 
-                }
-            })
-        })
+            if(item.dtype === 'bar'){
+                const col_subs = bar_cols[col]
+                col_subs.reverse()
+                mp[item['id']] =  order.map(d=>{
+                    const data = []
+                    var start = 0;
+                    for(var col_sub of col_subs){
+                        const val = tb.at(d,col_sub)
+                        data.push({
+                            'value':col_sub.split('@')[1],
+                            'start':start,
+                            count: val
+                        })
+                        start += val
+                    }
+                    return {key:d, data:data, total:start}
+                })
+            }
+            else
+                mp[item['id']] =  order.map(d=>{
+                    return {
+                        label: d,
+                        value: tb.at(d,col) 
+                    }
+                })
+        }
         return {
             arr: arr,
             mp: mp
